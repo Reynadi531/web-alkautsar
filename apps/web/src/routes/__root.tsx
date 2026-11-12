@@ -55,8 +55,14 @@ function RootDocument() {
         <HeadContent />
       </head>
       <body>
+        <a
+          href="#konten"
+          className="sr-only focus:not-sr-only focus:fixed focus:top-3 focus:left-3 focus:z-50 focus:rounded-[5px] focus:bg-primary focus:px-4 focus:py-2 focus:text-[13px] focus:font-semibold focus:text-primary-foreground"
+        >
+          Lewati ke konten
+        </a>
         <Navbar />
-        <main>
+        <main id="konten" tabIndex={-1} className="outline-none">
           <Outlet />
         </main>
         <Footer />

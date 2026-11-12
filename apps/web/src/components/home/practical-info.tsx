@@ -76,7 +76,7 @@ function AddressCard() {
         href={site.mapsUrl}
         target="_blank"
         rel="noopener noreferrer"
-        className="w-fit text-[13px] leading-[1.6] font-semibold text-primary hover:underline"
+        className="w-fit py-0.5 text-[13px] leading-[1.6] font-semibold text-primary hover:underline"
       >
         Buka petunjuk arah <span aria-hidden="true">↗</span>
       </a>

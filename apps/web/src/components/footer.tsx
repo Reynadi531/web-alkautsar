@@ -1,26 +1,17 @@
-import { footerQuickLinks, mainNav, site } from "../lib/site";
+import { footerExplore, footerQuickAccess, site, type NavLinkItem } from "../lib/site";
 
-const exploreLinks = mainNav.filter((item) => item.label !== "Kontak");
-
-function FooterColumn({
-  title,
-  links,
-}: {
-  title: string;
-  links: readonly { label: string; href: string; external?: boolean }[];
-}) {
+function FooterColumn({ title, links }: { title: string; links: readonly NavLinkItem[] }) {
   return (
-    <nav aria-label={title} className="flex flex-col gap-3 lg:w-[190px]">
+    <nav aria-label={title} className="flex flex-col gap-3 lg:w-60">
       <p className="text-[11px] leading-[1.55] font-semibold text-ak-footer-head uppercase">
         {title}
       </p>
-      <ul className="flex flex-col gap-3">
+      <ul className="flex flex-col gap-1 lg:gap-0">
         {links.map((link) => (
-          <li key={link.label}>
+          <li key={link.href}>
             <a
               href={link.href}
-              {...(link.external ? { target: "_blank", rel: "noopener noreferrer" } : {})}
-              className="text-xs leading-[1.55] text-ak-footer-text transition-colors hover:text-white"
+              className="block py-1.5 text-xs leading-[1.65] text-[#c6d6cb] transition-colors hover:text-white lg:py-1"
             >
               {link.label}
             </a>
@@ -43,8 +34,8 @@ export function Footer() {
             Cimahi Selatan, Kota Cimahi
           </address>
         </div>
-        <FooterColumn title="Jelajahi" links={exploreLinks} />
-        <FooterColumn title="Akses Cepat" links={footerQuickLinks} />
+        <FooterColumn title="Jelajahi" links={footerExplore} />
+        <FooterColumn title="Akses Cepat" links={footerQuickAccess} />
       </div>
 
       <hr className="border-ak-footer-rule" />

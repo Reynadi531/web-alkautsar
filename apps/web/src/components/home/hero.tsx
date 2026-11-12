@@ -61,7 +61,7 @@ export function Hero() {
             href={site.mapsUrl}
             target="_blank"
             rel="noopener noreferrer"
-            className="w-fit text-[13px] leading-normal text-white hover:underline"
+            className="w-fit py-1 text-[13px] leading-normal text-white hover:underline"
           >
             Lihat di peta <span aria-hidden="true">↗</span>
           </a>
