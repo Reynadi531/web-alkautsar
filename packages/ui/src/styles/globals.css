@@ -17,6 +17,7 @@
   --ak-line: #e3e7dd;
   --ak-border: #b9c9bb;
   --ak-divider: #dce5d7;
+  --ak-field: #d5dfd4;
   --ak-icon: #628263;
   --ak-body: #7b8578;
   --ak-chip: #f3ead0;
@@ -60,6 +61,7 @@
   --color-ak-line: var(--ak-line);
   --color-ak-border: var(--ak-border);
   --color-ak-divider: var(--ak-divider);
+  --color-ak-field: var(--ak-field);
   --color-ak-icon: var(--ak-icon);
   --color-ak-body: var(--ak-body);
   --color-ak-chip: var(--ak-chip);
