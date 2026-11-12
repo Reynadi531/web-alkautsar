@@ -1,0 +1,3 @@
+{
+  "extends": "@web-alkautsar/config/tsconfig.base.json"
+}
