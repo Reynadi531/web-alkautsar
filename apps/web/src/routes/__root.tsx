@@ -1,10 +1,10 @@
 import { HeadContent, Outlet, Scripts, createRootRouteWithContext } from "@tanstack/react-router";
-import { TanStackRouterDevtools } from "@tanstack/react-router-devtools";
 import { createMiddleware } from "@tanstack/react-start";
-import { Toaster } from "@web-alkautsar/ui/components/sonner";
 import { evlogErrorHandler } from "evlog/nitro/v3";
 
-import Header from "../components/header";
+import { Footer } from "../components/footer";
+import { Navbar } from "../components/navbar";
+import { site } from "../lib/site";
 
 import appCss from "../index.css?url";
 
@@ -25,13 +25,22 @@ export const Route = createRootRouteWithContext<RouterAppContext>()({
         content: "width=device-width, initial-scale=1",
       },
       {
-        title: "My App",
+        title: `${site.name} — Cimahi Selatan`,
+      },
+      {
+        name: "description",
+        content:
+          "Ruang ibadah dan kebersamaan warga di Komplek Pharmindo, Cimahi Selatan. Alamat, jadwal salat, dan kabar kegiatan Masjid Al-Kautsar Pharmindo.",
       },
     ],
     links: [
       {
         rel: "stylesheet",
         href: appCss,
+      },
+      {
+        rel: "icon",
+        href: "/images/logo-masjid.png",
       },
     ],
   }),
@@ -41,17 +50,16 @@ export const Route = createRootRouteWithContext<RouterAppContext>()({
 
 function RootDocument() {
   return (
-    <html lang="en" className="dark">
+    <html lang="id">
       <head>
         <HeadContent />
       </head>
       <body>
-        <div className="grid h-svh grid-rows-[auto_1fr]">
-          <Header />
+        <Navbar />
+        <main>
           <Outlet />
-        </div>
-        <Toaster richColors />
-        <TanStackRouterDevtools position="bottom-left" />
+        </main>
+        <Footer />
         <Scripts />
       </body>
     </html>
