@@ -15,7 +15,7 @@ export function Breadcrumb({ items }: { items: readonly BreadcrumbItem[] }) {
             <Fragment key={item.label}>
               <li>
                 {item.href && !last ? (
-                  <a href={item.href} className="inline-block py-1 hover:underline">
+                  <a href={item.href} className="-my-1 inline-block py-1 hover:underline">
                     {item.label}
                   </a>
                 ) : (
