@@ -11,6 +11,13 @@
     "shadcn": {
       "command": "npx",
       "args": ["-y", "shadcn@latest", "mcp"]
+    },
+    "pencil": {
+      "type": "stdio",
+      "command": "/mnt/d/Program Files/Pen/resources/app.asar.unpacked/out/mcp-server-windows-x64.exe",
+      "args": ["--app", "desktop"],
+      "env": {}
     }
+
   }
 }
