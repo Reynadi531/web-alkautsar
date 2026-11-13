@@ -19,6 +19,14 @@ This project was created with [Better-T-Stack](https://github.com/AmanVarshney01
 - No pagination is shown for the two available samples. Additional pages require additional content, not duplicate sample cards.
 - The existing green/cream palette and Plus Jakarta Sans follow the mosque design; the split highlight establishes hierarchy, while cards organize the remaining readings. Article-page text and control borders use darker shades for legibility.
 
+### Layanan Masjid
+
+- `/layanan` implements Pencil desktop `a3XXZR` and mobile `gVrZC`: validation notice, searchable sample cards, service filter, and the official-service empty state.
+- `/layanan/detail` and `?contoh=2` show the corresponding sample and its unconfirmed-detail state. Service terms, schedules, and contact details are not invented.
+- Content lives in `apps/web/src/lib/layanan.ts`. The period control is disabled until service dates are confirmed; search and service filters combine, with a reset action for no matches.
+- `/kontak` uses the existing site address, Instagram, and Google Maps destinations. No unverified phone number or booking action is shown.
+- Green/cream tokens, Plus Jakarta Sans, restrained corner radii, relevant location/conversation icons, and responsive spacing follow the supplied design. Equal cards present peer examples, while the pale notice and empty state distinguish unconfirmed official content. Page-local darker text and control borders improve legibility. Dials: ENERGY 1 / RHYTHM 1 / MOTION 1.
+
 ## Getting Started
 
 First, install the dependencies:
