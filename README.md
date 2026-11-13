@@ -11,6 +11,14 @@ This project was created with [Better-T-Stack](https://github.com/AmanVarshney01
 - **Turborepo** - Optimized monorepo build system
 - **Oxlint** - Oxlint + Oxfmt (linting & formatting)
 
+### Artikel Pilihan
+
+- `/artikel` implements Pencil desktop `C94Phy` and mobile `l4TUz`: editorial highlight, article cards, search, category/period filters, and the official-content empty state.
+- `/artikel/detail` displays the sourced sample text; `?contoh=2` displays the second sample's available metadata and its missing-manuscript state.
+- Content lives in `apps/web/src/lib/artikel.ts`. Samples have no confirmed author or publication date and are visibly labeled, not official publications.
+- No pagination is shown for the two available samples. Additional pages require additional content, not duplicate sample cards.
+- The existing green/cream palette and Plus Jakarta Sans follow the mosque design; the split highlight establishes hierarchy, while cards organize the remaining readings. Article-page text and control borders use darker shades for legibility.
+
 ## Getting Started
 
 First, install the dependencies:

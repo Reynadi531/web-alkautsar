@@ -1,1 +1,21 @@
 @import "@web-alkautsar/ui/globals.css";
+
+.article-page {
+  --ak-muted: #596a60;
+  --ak-brown: #806039;
+  --ak-field: #829589;
+  --ak-button-line: #829589;
+}
+
+.article-page :is(a, button, select) {
+  cursor: pointer;
+}
+
+.article-page :is(a, button, input, select):focus-visible {
+  outline: 2px solid var(--ak-green);
+  outline-offset: 4px;
+}
+
+.article-page a:active {
+  opacity: 0.8;
+}
