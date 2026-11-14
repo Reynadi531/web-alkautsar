@@ -8,6 +8,12 @@
   --ak-button-line: #829589;
 }
 
+.agenda-detail-page {
+  --ak-muted: #596a60;
+  --ak-brown: #806039;
+  --ak-button-line: #829589;
+}
+
 .history-page {
   --ak-muted: #596a60;
   --ak-brown: #806039;

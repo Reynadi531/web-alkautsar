@@ -43,6 +43,13 @@ This project was created with [Better-T-Stack](https://github.com/AmanVarshney01
 - Sejarah is available in desktop and mobile profile navigation and from the existing profile card. The return link opens `/profil`.
 - Green/cream tokens, Plus Jakarta Sans, restrained radii, and responsive spacing preserve the supplied identity. The pale notice separates unverified content; the numbered list represents the proposed chronology; the return arrow signals navigation. Page-local darker text and button borders improve contrast. Dials: ENERGY 1 / RHYTHM 2 / MOTION 1.
 
+### Agenda Detail
+
+- `/agenda/detail` implements Pencil desktop `S3OWLQ` and mobile `LjtIz`. The existing agenda card opens this route.
+- Desktop pairs the existing congregation photo with the information panel; mobile stacks the cropped photo above it. Shared navigation and footer remain unchanged.
+- The design's sample warning, unconfirmed event details, inactive-registration notice, and related-agenda empty state remain explicit. Return and inquiry links open `/agenda` and `/kontak`; no registration is offered.
+- Existing green/cream tokens and Plus Jakarta Sans preserve mosque identity. The pale panel groups event facts; directional arrows mark navigation; page-local darker text and borders improve contrast. Dials: ENERGY 1 / RHYTHM 2 / MOTION 1.
+
 ## Getting Started
 
 First, install the dependencies:
