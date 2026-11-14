@@ -92,6 +92,13 @@ This project was created with [Better-T-Stack](https://github.com/AmanVarshney01
 - No QR code, bank account, recipient, or confirmation contact is invented. The supplied warnings remain visible; no payment or accounting flow is introduced.
 - Existing green/cream tokens, Plus Jakarta Sans, radii, and responsive spacing retain Pencil identity. Panels group donation methods, numbered steps convey sequence, search/image icons identify unavailable information/assets, and the arrow marks navigation. Existing darker text tokens improve contrast. Dials: ENERGY 1 / RHYTHM 2 / MOTION 1. Content is static; no remote loading state is needed.
 
+### Hasil Pencarian
+
+- `/pencarian` implements Pencil desktop `bmdvh` and the mobile layout containing header `s03Ho`. Shared Indonesian-only header remains unchanged by request; ID / EN controls are omitted.
+- Search is available under Konten in desktop/mobile navigation. Native GET submission preserves `q` in the URL; `?q=kajian%20warga` shows the supplied no-results state, and `?reset=1` clears it. Recovery links open the cleared search and `/agenda`.
+- Results index available site pages and confirmed address information, not unconfirmed sample articles, events, or recordings. Matching is case-insensitive and requires all query words. Empty input prompts for a query rather than listing everything.
+- Existing green/cream tokens, Plus Jakarta Sans, responsive spacing, and pale empty-state panel follow Pencil. Search icons identify the task; arrows signal navigation/submission; existing darker text/borders preserve contrast. Dials: ENERGY 1 / RHYTHM 1 / MOTION 1. Search is local and synchronous; no remote loading/error state is introduced.
+
 ## Getting Started
 
 First, install the dependencies:
