@@ -1,16 +1,15 @@
 import { ArrowUpRight, Newspaper } from "lucide-react";
 import { useState } from "react";
 
-import { articles, type ArticleItem } from "../../lib/artikel";
-import { EmptyState } from "../empty-state";
-import { SearchField, SelectField } from "../filter-controls";
-import { SectionLabel } from "../section-label";
+import { type ArticleItem } from "../lib/artikel";
+import { EmptyState } from "./empty-state";
+import { SearchField, SelectField } from "./filter-controls";
+import { SectionLabel } from "./section-label";
 
 const titleClass = "text-[23px] leading-[1.4] font-semibold text-ak-dark lg:text-[30px]";
-const categories = ["Semua kategori", "Artikel"];
 const periods = ["Periode: semua", "Tanggal belum dikonfirmasi"];
 
-function ArticleCard({ article }: { article: ArticleItem }) {
+function EditorialCard({ article, label }: { article: ArticleItem; label: string }) {
   return (
     <article className="group relative flex flex-col overflow-hidden rounded-[7px] border border-ak-line bg-white">
       <div className="relative flex h-[185px] items-end bg-ak-cream p-4">
@@ -27,7 +26,7 @@ function ArticleCard({ article }: { article: ArticleItem }) {
         </span>
       </div>
       <div className="flex flex-col gap-2.5 p-[22px]">
-        <p className="text-[10px] leading-[1.65] font-semibold text-ak-brown">ARTIKEL</p>
+        <p className="text-[10px] leading-[1.65] font-semibold text-ak-brown">{label}</p>
         <h3 className="text-[19px] leading-[1.65] font-semibold text-ak-dark">
           <a
             href={article.href}
@@ -54,13 +53,25 @@ function ArticleCard({ article }: { article: ArticleItem }) {
   );
 }
 
-export function ArticleBrowser() {
+export function EditorialBrowser({
+  items,
+  label,
+  featuredTitle,
+  latestTitle,
+}: {
+  items: readonly ArticleItem[];
+  label: "Artikel" | "Berita";
+  featuredTitle: string;
+  latestTitle: string;
+}) {
+  const categories = ["Semua kategori", label];
+  const noun = label.toLocaleLowerCase("id");
   const [query, setQuery] = useState("");
   const [category, setCategory] = useState(categories[0]!);
   const [period, setPeriod] = useState(periods[0]!);
   const normalized = query.trim().toLocaleLowerCase("id");
-  const results = articles.filter((article) =>
-    `${article.title} Artikel Contoh konten Penulis tanggal belum dikonfirmasi`
+  const results = items.filter((article) =>
+    `${article.title} ${label} Contoh konten Penulis tanggal belum dikonfirmasi`
       .toLocaleLowerCase("id")
       .includes(normalized),
   );
@@ -69,39 +80,39 @@ export function ArticleBrowser() {
 
   return (
     <div className="flex flex-col gap-7 px-[26px] pt-8 pb-10 lg:gap-9 lg:px-19 lg:pt-[52px] lg:pb-16">
-      <search aria-label="Cari artikel" className="flex flex-col gap-5 lg:flex-row lg:gap-7">
+      <search aria-label={`Cari ${noun}`} className="flex flex-col gap-5 lg:flex-row lg:gap-7">
         <SearchField value={query} onChange={setQuery} />
         <SelectField
-          label="Kategori artikel"
+          label={`Kategori ${noun}`}
           value={category}
           options={categories}
           onChange={setCategory}
         />
         <SelectField
-          label="Periode artikel"
+          label={`Periode ${noun}`}
           value={period}
           options={periods}
           onChange={setPeriod}
         />
       </search>
       <p role="status" className="sr-only">
-        {isFiltering ? `${results.length} artikel ditemukan` : ""}
+        {isFiltering ? `${results.length} ${noun} ditemukan` : ""}
       </p>
       {results.length === 0 ? (
         <EmptyState
-          title="Tidak ada artikel yang sesuai"
-          description="Coba kata kunci lain atau hapus pencarian untuk melihat contoh artikel."
+          title={`Tidak ada ${noun} yang sesuai`}
+          description={`Coba kata kunci lain atau hapus pencarian untuk melihat contoh ${noun}.`}
         />
       ) : (
         <>
           {featured && (
             <section
-              id="artikel-pilihan"
+              id={`${noun}-pilihan`}
               aria-labelledby="judul-pilihan"
               className="flex flex-col gap-7 lg:gap-9"
             >
               <h2 id="judul-pilihan" className={titleClass}>
-                Artikel pilihan
+                {featuredTitle}
               </h2>
               <div className="grid gap-5 lg:grid-cols-2 lg:gap-7">
                 <img
@@ -113,13 +124,13 @@ export function ArticleBrowser() {
                   className="h-[230px] w-full rounded-[7px] object-cover lg:h-[340px]"
                 />
                 <div className="flex flex-col items-start gap-[18px] rounded-[7px] bg-ak-cream p-6">
-                  <SectionLabel>CONTOH KONTEN · ARTIKEL</SectionLabel>
+                  <SectionLabel>CONTOH KONTEN · {label.toUpperCase()}</SectionLabel>
                   <h3 className={titleClass}>{featured.title}</h3>
                   <p className="text-xs leading-[1.65] text-ak-muted">
                     Tanggal terbit dan penulis belum diberikan
                   </p>
                   <p className="text-sm leading-[1.65] text-ak-muted">
-                    Contoh tata letak artikel. Naskah ini belum menjadi publikasi resmi masjid.
+                    Contoh tata letak {noun}. Naskah ini belum menjadi publikasi resmi masjid.
                   </p>
                   <a
                     href={featured.href}
@@ -132,16 +143,16 @@ export function ArticleBrowser() {
             </section>
           )}
           <section
-            id="artikel-lainnya"
+            id={`${noun}-lainnya`}
             aria-labelledby="judul-lainnya"
             className="flex flex-col gap-7 lg:gap-9"
           >
             <h2 id="judul-lainnya" className={titleClass}>
-              Artikel lainnya
+              {latestTitle}
             </h2>
             <div className="grid gap-5 md:grid-cols-2 lg:gap-7">
               {results.map((article) => (
-                <ArticleCard key={article.id} article={article} />
+                <EditorialCard key={article.id} article={article} label={label.toUpperCase()} />
               ))}
             </div>
           </section>
@@ -149,7 +160,7 @@ export function ArticleBrowser() {
       )}
       {!isFiltering && (
         <EmptyState
-          title="Belum ada artikel resmi"
+          title={`Belum ada ${noun} resmi`}
           description="Keadaan data kosong saat belum ada naskah terkonfirmasi. Kartu di atas hanya contoh konten."
         />
       )}

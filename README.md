@@ -61,6 +61,14 @@ This project was created with [Better-T-Stack](https://github.com/AmanVarshney01
 - The design's sample warning, unconfirmed event details, inactive-registration notice, and related-agenda empty state remain explicit. Return and inquiry links open `/agenda` and `/kontak`; no registration is offered.
 - Existing green/cream tokens and Plus Jakarta Sans preserve mosque identity. The pale panel groups event facts; directional arrows mark navigation; page-local darker text and borders improve contrast. Dials: ENERGY 1 / RHYTHM 2 / MOTION 1.
 
+### Berita & Kabar
+
+- `/berita` implements Pencil desktop `gRqz5` and mobile `nyOiO`: search/category/undated-period controls, featured news, two sample cards, and the official-news empty state. The highlight and cards stack on mobile.
+- Samples live in `apps/web/src/lib/berita.ts`. Dates, authors, and official publication status remain explicitly unconfirmed. Pagination is omitted because only two samples exist, not three pages of content.
+- Highlight/card links open `/berita/detail` and `?contoh=2`; the linked detail uses the existing editorial reading layout, supplied illustrative manuscript, copy-link sharing, and return navigation. The second sample retains the missing-manuscript state.
+- News is enabled in existing desktop/mobile navigation and footer links. Article and news pages share `EditorialBrowser` and `EditorialDetail`, preserving article behavior without duplicate layouts.
+- Existing green/cream colors and Plus Jakarta Sans preserve mosque identity; the split highlight establishes editorial hierarchy, equal cards group peer samples, pale notices identify unconfirmed content, and relevant search/newspaper/share icons identify actions. Darker existing text and borders retain legibility. Dials: ENERGY 1 / RHYTHM 2 / MOTION 1. Content is static; no remote loading state is introduced.
+
 ## Getting Started
 
 First, install the dependencies:

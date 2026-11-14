@@ -1,7 +1,8 @@
 import { createFileRoute } from "@tanstack/react-router";
 
-import { ArticleBrowser } from "../../components/artikel/article-browser";
+import { EditorialBrowser } from "../../components/editorial-browser";
 import { PageHeader } from "../../components/page-header";
+import { articles } from "../../lib/artikel";
 import { site } from "../../lib/site";
 
 export const Route = createFileRoute("/artikel/")({
@@ -23,7 +24,12 @@ function ArticlePage() {
         title="Artikel Pilihan"
         intro="Cerita, bacaan, dan kabar dari lingkungan masjid."
       />
-      <ArticleBrowser />
+      <EditorialBrowser
+        items={articles}
+        label="Artikel"
+        featuredTitle="Artikel pilihan"
+        latestTitle="Artikel lainnya"
+      />
     </div>
   );
 }

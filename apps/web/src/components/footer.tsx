@@ -66,7 +66,7 @@ export function Footer() {
               footerExplore[2]!,
             ],
             [
-              { label: "Berita", href: "/berita", unavailable: true },
+              { label: "Berita", href: "/berita" },
               { label: "Konten", href: "/video" },
               { label: "Layanan", href: "/layanan" },
             ],

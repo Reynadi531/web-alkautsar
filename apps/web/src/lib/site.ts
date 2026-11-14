@@ -42,7 +42,7 @@ export const navGroups: readonly NavGroup[] = [
       { label: "Agenda", href: "/agenda" },
       { label: "Seminar", href: "/seminar", unavailable: true },
       { label: "Program", href: "/program", unavailable: true },
-      { label: "Berita / Kabar", href: "/berita", unavailable: true },
+      { label: "Berita / Kabar", href: "/berita" },
     ],
   },
   {
@@ -79,7 +79,7 @@ export const footerExplore: readonly NavLinkItem[] = [
   { label: "Profil", href: "/profil" },
   { label: "Agenda & seminar", href: "/agenda" },
   { label: "Program", href: "/program", unavailable: true },
-  { label: "Berita / kabar", href: "/berita", unavailable: true },
+  { label: "Berita / kabar", href: "/berita" },
 ];
 
 export const footerQuickAccess: readonly NavLinkItem[] = [
