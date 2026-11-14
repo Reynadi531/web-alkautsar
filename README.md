@@ -32,10 +32,12 @@ This project was created with [Better-T-Stack](https://github.com/AmanVarshney01
 ### Layanan Masjid
 
 - `/layanan` implements Pencil desktop `a3XXZR` and mobile `gVrZC`: validation notice, searchable sample cards, service filter, and the official-service empty state.
-- `/layanan/detail` and `?contoh=2` show the corresponding sample and its unconfirmed-detail state. Service terms, schedules, and contact details are not invented.
+- `/layanan/detail` implements Pencil desktop `ETdEQ` and mobile `K7Gb4t`: service description, numbered example access flow, unconfirmed schedule/contact panel, and original mosque photos. Desktop shows two columns and two photos; mobile stacks the panel and shows the exterior photo only. `?contoh=2` retains the corresponding sample title.
+- Return and contact links open `/layanan` and `/kontak`. No service procedure, schedule, phone number, or booking capability is represented as confirmed.
 - Content lives in `apps/web/src/lib/layanan.ts`. The period control is disabled until service dates are confirmed; search and service filters combine, with a reset action for no matches.
 - `/kontak` uses the existing site address, Instagram, and Google Maps destinations. No unverified phone number or booking action is shown.
 - Green/cream tokens, Plus Jakarta Sans, restrained corner radii, relevant location/conversation icons, and responsive spacing follow the supplied design. Equal cards present peer examples, while the pale notice and empty state distinguish unconfirmed official content. Page-local darker text and control borders improve legibility. Dials: ENERGY 1 / RHYTHM 1 / MOTION 1.
+- Detail-page green/cream tokens, Plus Jakarta Sans, restrained radii, and responsive spacing follow Pencil. The pale panel groups unavailable service details; the clock identifies scheduling, the numbered list preserves the supplied example sequence, and arrows signal navigation. Existing darker text/borders retain legibility. Dials: ENERGY 1 / RHYTHM 2 / MOTION 1. Content is static; no loading state or remote service data is introduced.
 
 ### Sejarah Masjid
 
