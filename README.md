@@ -69,6 +69,14 @@ This project was created with [Better-T-Stack](https://github.com/AmanVarshney01
 - News is enabled in existing desktop/mobile navigation and footer links. Article and news pages share `EditorialBrowser` and `EditorialDetail`, preserving article behavior without duplicate layouts.
 - Existing green/cream colors and Plus Jakarta Sans preserve mosque identity; the split highlight establishes editorial hierarchy, equal cards group peer samples, pale notices identify unconfirmed content, and relevant search/newspaper/share icons identify actions. Darker existing text and borders retain legibility. Dials: ENERGY 1 / RHYTHM 2 / MOTION 1. Content is static; no remote loading state is introduced.
 
+### Pustaka Masjid
+
+- `/pustaka` implements Pencil desktop `gyoUC` and mobile `W5cfqo`: search, category/undated-period filters, two sample cards, validation notice, and official-library empty state. Cards stack on phones and use two columns on tablets and desktop.
+- Samples live in `apps/web/src/lib/pustaka.ts`. Search combines with filters and offers a reset for no matches. Both samples share the only known category and unconfirmed date status. Pagination is omitted because no additional records exist.
+- Card links open `/pustaka/detail` and `?contoh=2`, using the linked Pencil detail frames `zGibO` and `c53vf`. Return and inquiry links open `/pustaka` and `/kontak`; reading/download controls remain explicitly disabled until official files are supplied.
+- Pustaka is enabled in existing desktop/mobile navigation. Shared header/footer remain unchanged, including the existing Indonesian-only interface.
+- Green/cream tokens and Plus Jakarta Sans preserve the supplied mosque identity; equal cards group peer samples, pale panels distinguish sample covers and unavailable documents, file/book icons identify reading materials, and arrows indicate navigation. Existing darker text/borders retain contrast. Dials: ENERGY 1 / RHYTHM 1 / MOTION 1. Content is static; no remote loading or download capability is invented.
+
 ## Getting Started
 
 First, install the dependencies:

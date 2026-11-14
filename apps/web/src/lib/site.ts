@@ -49,7 +49,7 @@ export const navGroups: readonly NavGroup[] = [
     label: "Konten",
     items: [
       { label: "Video", href: "/video" },
-      { label: "Pustaka", href: "/pustaka", unavailable: true },
+      { label: "Pustaka", href: "/pustaka" },
       { label: "Publikasi", href: "/publikasi", unavailable: true },
       { label: "Artikel", href: "/artikel" },
       { label: "Kolom", href: "/kolom", unavailable: true },
