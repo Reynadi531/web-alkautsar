@@ -17,7 +17,8 @@
 }
 
 .history-page,
-.vision-mission-page {
+.vision-mission-page,
+.management-page {
   --ak-muted: #596a60;
   --ak-brown: #806039;
   --ak-border: #829589;

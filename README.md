@@ -54,6 +54,14 @@ This project was created with [Better-T-Stack](https://github.com/AmanVarshney01
 - Desktop/mobile profile navigation and the existing profile card open this route. `Kembali ke daftar` returns to `/profil`.
 - Existing green/cream tokens, Plus Jakarta Sans, radii, and responsive spacing preserve the supplied identity. The green panel emphasizes vision, numbered cream rows organize mission placeholders, and the return arrow indicates navigation. Darker text and borders retain contrast. Dials: ENERGY 1 / RHYTHM 2 / MOTION 1.
 
+### Kepengurusan dan Bidang
+
+- `/profil/pengurus` implements Pencil desktop `t7CFL` and mobile `rQqKD`: four example roles, missing-photo icons, validation notice, and list/chart navigation.
+- Linked pages implement the existing chart (`Iganw` / `jWgWj`), department listing (`ldO7e` / `hTdwO`), and department detail (`sfX2z` / `tiT2s`) designs. `?contoh=2` selects Sosial & Kemasyarakatan; detail links return to the list or open `/kontak`.
+- Desktop uses paired cards and chart peers; mobile stacks them without horizontal scrolling. Existing header/footer remain shared; Kepengurusan and Bidang are enabled in desktop/mobile profile navigation.
+- All roles, hierarchy, and departments remain explicitly illustrative. Names, photos, terms, contacts, and activities are not invented. Content is static, so no asynchronous loading/error state is introduced.
+- Green/cream tokens, Plus Jakarta Sans, spacing, and restrained radii preserve Pencil's identity. Cards group peer examples; arrows identify navigation or hierarchy; book/handshake icons distinguish department categories. Page-local darker text/borders improve contrast. Approved punctuation replaces em dashes. Dials: ENERGY 1 / RHYTHM 1 / MOTION 1.
+
 ### Agenda Detail
 
 - `/agenda/detail` implements Pencil desktop `S3OWLQ` and mobile `LjtIz`. The existing agenda card opens this route.
@@ -76,6 +84,7 @@ This project was created with [Better-T-Stack](https://github.com/AmanVarshney01
 - Card links open `/pustaka/detail` and `?contoh=2`, using the linked Pencil detail frames `zGibO` and `c53vf`. Return and inquiry links open `/pustaka` and `/kontak`; reading/download controls remain explicitly disabled until official files are supplied.
 - Pustaka is enabled in existing desktop/mobile navigation. Shared header/footer remain unchanged, including the existing Indonesian-only interface.
 - Green/cream tokens and Plus Jakarta Sans preserve the supplied mosque identity; equal cards group peer samples, pale panels distinguish sample covers and unavailable documents, file/book icons identify reading materials, and arrows indicate navigation. Existing darker text/borders retain contrast. Dials: ENERGY 1 / RHYTHM 1 / MOTION 1. Content is static; no remote loading or download capability is invented.
+- Detail frames `zGibO` / `c53vf` use a 340 × 430px desktop sample cover, a full-width 350px-tall phone cover, and 380px/260px preview panels. The metadata stacks below the cover on phones; inactive reading/download controls stack at full width. Navigation arrows match Pencil; darker existing text preserves contrast. Detail dials: ENERGY 1 / RHYTHM 2 / MOTION 1.
 
 ### Kolom & Opini
 

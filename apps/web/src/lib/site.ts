@@ -31,8 +31,8 @@ export const navGroups: readonly NavGroup[] = [
       { label: "Profil", href: "/profil" },
       { label: "Sejarah", href: "/profil/sejarah" },
       { label: "Visi & Misi", href: "/profil/visi-misi" },
-      { label: "Kepengurusan", href: "/profil/pengurus", unavailable: true },
-      { label: "Bidang", href: "/profil/bidang", unavailable: true },
+      { label: "Kepengurusan", href: "/profil/pengurus" },
+      { label: "Bidang", href: "/profil/bidang" },
     ],
   },
   {

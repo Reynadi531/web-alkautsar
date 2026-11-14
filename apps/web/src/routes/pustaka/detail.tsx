@@ -1,5 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { ArrowLeft, ArrowUpRight, BookOpen, FileText } from "lucide-react";
+import { ArrowUpRight, BookOpen, FileText } from "lucide-react";
 
 import { PageHeader } from "../../components/page-header";
 import { SectionLabel } from "../../components/section-label";
@@ -33,11 +33,11 @@ function PustakaDetail() {
       />
       <div className="flex flex-col gap-7 px-[26px] pt-8 pb-10 lg:gap-9 lg:px-19 lg:pt-[52px] lg:pb-16">
         <a href="/pustaka" className={linkClass}>
-          <ArrowLeft aria-hidden="true" className="size-[15px]" />
           Kembali ke daftar
+          <ArrowUpRight aria-hidden="true" className="size-[15px]" />
         </a>
         <section id="tentang-pustaka" className="flex flex-col gap-5 md:flex-row lg:gap-7">
-          <div className="flex min-h-[360px] flex-col justify-between gap-[22px] rounded-[6px] bg-ak-pale p-8 md:w-[280px] md:shrink-0 lg:min-h-[430px] lg:w-[340px]">
+          <div className="flex min-h-[350px] flex-col justify-between gap-[22px] rounded-[6px] bg-ak-pale p-8 md:w-[280px] md:shrink-0 lg:min-h-[430px] lg:w-[340px]">
             <SectionLabel>Contoh sampul</SectionLabel>
             <BookOpen aria-hidden="true" className="size-10 text-primary" />
             <p className="text-[30px] leading-[1.65] font-semibold text-ak-dark">{title}</p>
@@ -73,10 +73,12 @@ function PustakaDetail() {
         <section
           id="pratinjau-pustaka"
           aria-label="Pratinjau pustaka"
-          className="flex min-h-[280px] flex-col items-center justify-center gap-4 rounded-[7px] bg-ak-pale p-[26px] text-center lg:min-h-[380px]"
+          className="flex min-h-[260px] flex-col items-center justify-center gap-4 rounded-[7px] bg-ak-pale p-[26px] text-center lg:min-h-[380px]"
         >
-          <FileText aria-hidden="true" className="size-10 text-primary" />
-          <h2 className="text-xl font-semibold text-ak-dark">Pratinjau belum tersedia</h2>
+          <FileText aria-hidden="true" className="size-9 text-primary" />
+          <h2 className="text-[22px] leading-[1.65] font-semibold text-ak-dark">
+            Pratinjau belum tersedia
+          </h2>
           <p className="text-[13px] leading-[1.65] text-ak-muted">
             Berkas resmi belum diberikan. Tidak ada unduhan aktif.
           </p>
@@ -87,7 +89,7 @@ function PustakaDetail() {
               key={label}
               type="button"
               disabled
-              className="min-h-12 rounded-[5px] border border-ak-field bg-ak-cream px-[18px] text-[13px] font-semibold text-ak-muted disabled:cursor-not-allowed"
+              className="min-h-12 rounded-[5px] bg-[#e8ede5] px-[18px] text-xs leading-[1.65] font-semibold text-ak-muted disabled:cursor-not-allowed"
             >
               {label}: belum tersedia
             </button>
