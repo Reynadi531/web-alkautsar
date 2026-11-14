@@ -22,10 +22,12 @@ This project was created with [Better-T-Stack](https://github.com/AmanVarshney01
 ### Artikel Pilihan
 
 - `/artikel` implements Pencil desktop `C94Phy` and mobile `l4TUz`: editorial highlight, article cards, search, category/period filters, and the official-content empty state.
-- `/artikel/detail` displays the sourced sample text; `?contoh=2` displays the second sample's available metadata and its missing-manuscript state.
+- `/artikel/detail` implements Pencil desktop `U5Oup3` and mobile `VGZRS`: full-width cropped photo, metadata/share row (stacked on mobile), centered 780px reading column, and full-width related-content empty state. `?contoh=2` preserves the second sample's missing-manuscript state.
+- Both `Bagikan` buttons copy the current article URL, with pending, success, and clipboard-error feedback. `Kembali ke daftar` opens `/artikel`.
 - Content lives in `apps/web/src/lib/artikel.ts`. Samples have no confirmed author or publication date and are visibly labeled, not official publications.
 - No pagination is shown for the two available samples. Additional pages require additional content, not duplicate sample cards.
 - The existing green/cream palette and Plus Jakarta Sans follow the mosque design; the split highlight establishes hierarchy, while cards organize the remaining readings. Article-page text and control borders use darker shades for legibility.
+- Detail-page typography and spacing follow the supplied desktop/mobile designs; the narrow reading column improves readability, while the pale warning distinguishes illustrative text. Existing darker text/borders retain contrast; arrows indicate navigation and the share icon identifies link sharing. Dials: ENERGY 1 / RHYTHM 2 / MOTION 1. No asynchronous article data is fetched.
 
 ### Layanan Masjid
 
