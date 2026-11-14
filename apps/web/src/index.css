@@ -2,7 +2,8 @@
 
 .article-page,
 .service-page,
-.pustaka-page {
+.pustaka-page,
+.donation-page {
   --ak-muted: #596a60;
   --ak-brown: #806039;
   --ak-field: #829589;

@@ -60,7 +60,7 @@ export const navGroups: readonly NavGroup[] = [
     label: "Lainnya",
     items: [
       { label: "Layanan", href: "/layanan" },
-      { label: "Donasi", href: "/donasi", unavailable: true },
+      { label: "Donasi", href: "/donasi" },
       { label: "Kontak & Lokasi", href: "/kontak" },
     ],
   },
@@ -86,7 +86,7 @@ export const footerQuickAccess: readonly NavLinkItem[] = [
   { label: "Video & bahan bacaan", href: "/video" },
   { label: "Artikel & kolom", href: "/artikel" },
   { label: "Layanan", href: "/layanan" },
-  { label: "Donasi", href: "/donasi", unavailable: true },
+  { label: "Donasi", href: "/donasi" },
   { label: "Kontak & lokasi", href: "/kontak" },
 ];
 

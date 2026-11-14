@@ -85,6 +85,13 @@ This project was created with [Better-T-Stack](https://github.com/AmanVarshney01
 - Kolom is enabled in existing desktop/mobile content navigation. The Indonesian-only shared header/footer remain unchanged.
 - Existing green/cream tokens and Plus Jakarta Sans preserve Pencil identity; the split highlight establishes hierarchy, equal cards group peer samples, pale notices identify unconfirmed content, and search/newspaper/share icons identify actions. Existing darker text and control borders retain contrast. Dials: ENERGY 1 / RHYTHM 2 / MOTION 1. Content is static; no remote loading state is introduced.
 
+### Donasi untuk Masjid
+
+- `/donasi` implements Pencil desktop `CA4sQ` and mobile `E31Rjk`: validation notice, donation-purpose empty state, QRIS placeholder, bank-information panel, three guidance steps, and contact link.
+- Desktop pairs the payment-information panels; mobile stacks them. Shared navigation and footer now link to `/donasi`; the contact action opens `/kontak`.
+- No QR code, bank account, recipient, or confirmation contact is invented. The supplied warnings remain visible; no payment or accounting flow is introduced.
+- Existing green/cream tokens, Plus Jakarta Sans, radii, and responsive spacing retain Pencil identity. Panels group donation methods, numbered steps convey sequence, search/image icons identify unavailable information/assets, and the arrow marks navigation. Existing darker text tokens improve contrast. Dials: ENERGY 1 / RHYTHM 2 / MOTION 1. Content is static; no remote loading state is needed.
+
 ## Getting Started
 
 First, install the dependencies:
