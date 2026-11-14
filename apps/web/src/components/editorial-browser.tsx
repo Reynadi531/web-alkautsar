@@ -60,7 +60,7 @@ export function EditorialBrowser({
   latestTitle,
 }: {
   items: readonly ArticleItem[];
-  label: "Artikel" | "Berita";
+  label: "Artikel" | "Berita" | "Kolom";
   featuredTitle: string;
   latestTitle: string;
 }) {

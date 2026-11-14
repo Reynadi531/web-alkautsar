@@ -49,7 +49,7 @@ export function EditorialDetail({
   listHref,
 }: {
   article: ArticleItem;
-  label: "Artikel" | "Berita";
+  label: "Artikel" | "Berita" | "Kolom";
   listHref: string;
 }) {
   return (

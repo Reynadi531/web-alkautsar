@@ -77,6 +77,14 @@ This project was created with [Better-T-Stack](https://github.com/AmanVarshney01
 - Pustaka is enabled in existing desktop/mobile navigation. Shared header/footer remain unchanged, including the existing Indonesian-only interface.
 - Green/cream tokens and Plus Jakarta Sans preserve the supplied mosque identity; equal cards group peer samples, pale panels distinguish sample covers and unavailable documents, file/book icons identify reading materials, and arrows indicate navigation. Existing darker text/borders retain contrast. Dials: ENERGY 1 / RHYTHM 1 / MOTION 1. Content is static; no remote loading or download capability is invented.
 
+### Kolom & Opini
+
+- `/kolom` implements Pencil desktop `TxsZ2` and mobile `P54mY`: search/category/undated-period controls, split editorial highlight, two sample cards, and the official-column empty state. Mobile stacks the highlight and cards; tablets use a two-column card grid.
+- Samples live in `apps/web/src/lib/kolom.ts`. Authors, dates, and official publication status remain explicitly unconfirmed. Pagination is omitted because only two samples exist.
+- Highlight/card links open `/kolom/detail` and `?contoh=2`, reusing the existing editorial reading layout and sharing controls. The second sample retains the missing-manuscript state; return navigation opens `/kolom`.
+- Kolom is enabled in existing desktop/mobile content navigation. The Indonesian-only shared header/footer remain unchanged.
+- Existing green/cream tokens and Plus Jakarta Sans preserve Pencil identity; the split highlight establishes hierarchy, equal cards group peer samples, pale notices identify unconfirmed content, and search/newspaper/share icons identify actions. Existing darker text and control borders retain contrast. Dials: ENERGY 1 / RHYTHM 2 / MOTION 1. Content is static; no remote loading state is introduced.
+
 ## Getting Started
 
 First, install the dependencies:
