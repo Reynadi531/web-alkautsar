@@ -35,6 +35,14 @@ This project was created with [Better-T-Stack](https://github.com/AmanVarshney01
 - `/kontak` uses the existing site address, Instagram, and Google Maps destinations. No unverified phone number or booking action is shown.
 - Green/cream tokens, Plus Jakarta Sans, restrained corner radii, relevant location/conversation icons, and responsive spacing follow the supplied design. Equal cards present peer examples, while the pale notice and empty state distinguish unconfirmed official content. Page-local darker text and control borders improve legibility. Dials: ENERGY 1 / RHYTHM 1 / MOTION 1.
 
+### Sejarah Masjid
+
+- `/profil/sejarah` implements Pencil desktop `oNcSw` and mobile `iJaFb`, using the existing site header and footer.
+- Desktop pairs the original aerial and exterior photos above a two-column narrative and timeline. Mobile keeps the aerial photo and stacks the narrative and timeline.
+- The supplied validation notice and editorial placeholders remain visible. Founding dates and historical events are not invented; no asynchronous history data is fetched.
+- Sejarah is available in desktop and mobile profile navigation and from the existing profile card. The return link opens `/profil`.
+- Green/cream tokens, Plus Jakarta Sans, restrained radii, and responsive spacing preserve the supplied identity. The pale notice separates unverified content; the numbered list represents the proposed chronology; the return arrow signals navigation. Page-local darker text and button borders improve contrast. Dials: ENERGY 1 / RHYTHM 2 / MOTION 1.
+
 ## Getting Started
 
 First, install the dependencies:
