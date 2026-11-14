@@ -27,3 +27,35 @@
 .service-page :disabled {
   cursor: default;
 }
+
+.home-page {
+  --ak-muted: #596a60;
+  --ak-body: #596a60;
+  --ak-brown: #806039;
+  --ak-chip-text: #725d32;
+}
+
+:is(a, button, summary) {
+  cursor: pointer;
+}
+
+:is(a, button):focus-visible {
+  outline: 2px solid currentColor;
+  outline-offset: 4px;
+}
+
+:is(a, button):active {
+  opacity: 0.8;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  *,
+  *::before,
+  *::after {
+    transition-duration: 0s !important;
+  }
+}

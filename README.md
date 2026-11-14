@@ -11,6 +11,14 @@ This project was created with [Better-T-Stack](https://github.com/AmanVarshney01
 - **Turborepo** - Optimized monorepo build system
 - **Oxlint** - Oxlint + Oxfmt (linting & formatting)
 
+### Beranda
+
+- `/` implements Pencil desktop `jeYAp` and mobile `j1g948`, in Bahasa Indonesia only; no language switcher.
+- Desktop retains the split aerial-photo hero and gallery. Mobile uses the green text-only hero, address before prayer times, stacked activity archive, and compact footer.
+- Prayer times remain live Aladhan data, with the supplied unavailable state when data cannot be loaded. No hardcoded schedule replaces the existing integration.
+- Navigation preserves the design's groups. Unbuilt destinations are marked `Belum tersedia` and are not links; confirmed routes, Google Maps, and Instagram remain actionable.
+- Existing mosque imagery, Plus Jakarta Sans, and green/cream tokens retain the supplied identity. Brown section labels organize content; relevant icons distinguish location, schedule, and archive; darker text improves contrast. Dials: ENERGY 1 / RHYTHM 2 / MOTION 1.
+
 ### Artikel Pilihan
 
 - `/artikel` implements Pencil desktop `C94Phy` and mobile `l4TUz`: editorial highlight, article cards, search, category/period filters, and the official-content empty state.

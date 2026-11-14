@@ -16,12 +16,12 @@ function HomePage() {
   const prayer = Route.useLoaderData();
 
   return (
-    <>
+    <div className="home-page">
       <Hero />
       <Gallery />
       <PracticalInfo prayer={prayer} />
       <Activities />
       <Connect />
-    </>
+    </div>
   );
 }

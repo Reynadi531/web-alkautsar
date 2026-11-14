@@ -14,6 +14,7 @@ export const site = {
 export interface NavLinkItem {
   label: string;
   href: string;
+  unavailable?: boolean;
 }
 
 export interface NavGroup {
@@ -28,10 +29,10 @@ export const navGroups: readonly NavGroup[] = [
     href: "/profil",
     items: [
       { label: "Profil", href: "/profil" },
-      { label: "Sejarah", href: "/profil/sejarah" },
-      { label: "Visi & Misi", href: "/profil/visi-misi" },
-      { label: "Kepengurusan", href: "/profil/pengurus" },
-      { label: "Bidang", href: "/profil/bidang" },
+      { label: "Sejarah", href: "/profil/sejarah", unavailable: true },
+      { label: "Visi & Misi", href: "/profil/visi-misi", unavailable: true },
+      { label: "Kepengurusan", href: "/profil/pengurus", unavailable: true },
+      { label: "Bidang", href: "/profil/bidang", unavailable: true },
     ],
   },
   {
@@ -39,27 +40,27 @@ export const navGroups: readonly NavGroup[] = [
     href: "/agenda",
     items: [
       { label: "Agenda", href: "/agenda" },
-      { label: "Seminar", href: "/seminar" },
-      { label: "Program", href: "/program" },
-      { label: "Berita / Kabar", href: "/berita" },
+      { label: "Seminar", href: "/seminar", unavailable: true },
+      { label: "Program", href: "/program", unavailable: true },
+      { label: "Berita / Kabar", href: "/berita", unavailable: true },
     ],
   },
   {
     label: "Konten",
     items: [
       { label: "Video", href: "/video" },
-      { label: "Pustaka", href: "/pustaka" },
-      { label: "Publikasi", href: "/publikasi" },
+      { label: "Pustaka", href: "/pustaka", unavailable: true },
+      { label: "Publikasi", href: "/publikasi", unavailable: true },
       { label: "Artikel", href: "/artikel" },
-      { label: "Kolom", href: "/kolom" },
-      { label: "Buletin", href: "/buletin" },
+      { label: "Kolom", href: "/kolom", unavailable: true },
+      { label: "Buletin", href: "/buletin", unavailable: true },
     ],
   },
   {
     label: "Lainnya",
     items: [
       { label: "Layanan", href: "/layanan" },
-      { label: "Donasi", href: "/donasi" },
+      { label: "Donasi", href: "/donasi", unavailable: true },
       { label: "Kontak & Lokasi", href: "/kontak" },
     ],
   },
@@ -69,7 +70,7 @@ export const topNav: readonly (NavLinkItem | NavGroup)[] = [
   { label: "Beranda", href: "/" },
   navGroups[0]!,
   navGroups[1]!,
-  { label: "Program", href: "/program" },
+  { label: "Program", href: "/program", unavailable: true },
   navGroups[2]!,
   navGroups[3]!,
 ];
@@ -77,15 +78,15 @@ export const topNav: readonly (NavLinkItem | NavGroup)[] = [
 export const footerExplore: readonly NavLinkItem[] = [
   { label: "Profil", href: "/profil" },
   { label: "Agenda & seminar", href: "/agenda" },
-  { label: "Program", href: "/program" },
-  { label: "Berita / kabar", href: "/berita" },
+  { label: "Program", href: "/program", unavailable: true },
+  { label: "Berita / kabar", href: "/berita", unavailable: true },
 ];
 
 export const footerQuickAccess: readonly NavLinkItem[] = [
   { label: "Video & bahan bacaan", href: "/video" },
   { label: "Artikel & kolom", href: "/artikel" },
   { label: "Layanan", href: "/layanan" },
-  { label: "Donasi", href: "/donasi" },
+  { label: "Donasi", href: "/donasi", unavailable: true },
   { label: "Kontak & lokasi", href: "/kontak" },
 ];
 

@@ -61,6 +61,18 @@ function DesktopMenu({
       {topNav.map((item) => {
         if (!isGroup(item)) {
           const active = isActivePath(pathname, item.href);
+          if (item.unavailable) {
+            return (
+              <span
+                key={item.label}
+                aria-disabled="true"
+                className="flex flex-col text-xs text-primary"
+              >
+                {item.label}
+                <span className="text-[8px]">Belum tersedia</span>
+              </span>
+            );
+          }
           return (
             <a
               key={item.label}
@@ -119,17 +131,27 @@ function DesktopMenu({
                 const childActive = isActivePath(pathname, child.href);
                 return (
                   <li key={child.href}>
-                    <a
-                      href={child.href}
-                      aria-current={childActive ? "page" : undefined}
-                      onClick={onNavigate}
-                      className={cn(
-                        "flex h-12 items-center rounded-[5px] px-3 text-xs leading-[1.65] whitespace-nowrap text-ak-muted transition-colors hover:bg-ak-pale hover:text-primary",
-                        childActive && "font-bold text-primary",
-                      )}
-                    >
-                      {child.label}
-                    </a>
+                    {child.unavailable ? (
+                      <span
+                        aria-disabled="true"
+                        className="flex min-h-12 items-center justify-between gap-4 px-3 text-xs text-ak-muted"
+                      >
+                        {child.label}
+                        <span className="text-[9px]">Belum tersedia</span>
+                      </span>
+                    ) : (
+                      <a
+                        href={child.href}
+                        aria-current={childActive ? "page" : undefined}
+                        onClick={onNavigate}
+                        className={cn(
+                          "flex h-12 items-center rounded-[5px] px-3 text-xs leading-[1.65] whitespace-nowrap text-ak-muted transition-colors hover:bg-ak-pale hover:text-primary",
+                          childActive && "font-bold text-primary",
+                        )}
+                      >
+                        {child.label}
+                      </a>
+                    )}
                   </li>
                 );
               })}
@@ -197,17 +219,27 @@ function MobileMenu({
                   const active = isActivePath(pathname, item.href);
                   return (
                     <li key={item.href}>
-                      <a
-                        href={item.href}
-                        aria-current={active ? "page" : undefined}
-                        onClick={onNavigate}
-                        className={cn(
-                          "flex h-12 items-center text-[13px] leading-[1.65] text-ak-muted",
-                          active && "font-bold",
-                        )}
-                      >
-                        {item.label}
-                      </a>
+                      {item.unavailable ? (
+                        <span
+                          aria-disabled="true"
+                          className="flex min-h-12 items-center justify-between gap-4 text-[13px] text-ak-muted"
+                        >
+                          {item.label}
+                          <span className="text-[9px]">Belum tersedia</span>
+                        </span>
+                      ) : (
+                        <a
+                          href={item.href}
+                          aria-current={active ? "page" : undefined}
+                          onClick={onNavigate}
+                          className={cn(
+                            "flex h-12 items-center text-[13px] leading-[1.65] text-ak-muted",
+                            active && "font-bold",
+                          )}
+                        >
+                          {item.label}
+                        </a>
+                      )}
                     </li>
                   );
                 })}
