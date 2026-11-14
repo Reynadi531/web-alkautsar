@@ -14,7 +14,8 @@
   --ak-button-line: #829589;
 }
 
-.history-page {
+.history-page,
+.vision-mission-page {
   --ak-muted: #596a60;
   --ak-brown: #806039;
   --ak-border: #829589;

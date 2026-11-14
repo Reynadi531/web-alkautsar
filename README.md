@@ -47,6 +47,13 @@ This project was created with [Better-T-Stack](https://github.com/AmanVarshney01
 - Sejarah is available in desktop and mobile profile navigation and from the existing profile card. The return link opens `/profil`.
 - Green/cream tokens, Plus Jakarta Sans, restrained radii, and responsive spacing preserve the supplied identity. The pale notice separates unverified content; the numbered list represents the proposed chronology; the return arrow signals navigation. Page-local darker text and button borders improve contrast. Dials: ENERGY 1 / RHYTHM 2 / MOTION 1.
 
+### Visi dan Misi
+
+- `/profil/visi-misi` implements Pencil desktop `vdOWR` and mobile `r7aPkv`, reusing the site header and footer.
+- Desktop pairs the green vision panel with three numbered mission rows; mobile stacks them. The validation notice and all pending-official-text messages match the supplied design; no official statements are invented or fetched.
+- Desktop/mobile profile navigation and the existing profile card open this route. `Kembali ke daftar` returns to `/profil`.
+- Existing green/cream tokens, Plus Jakarta Sans, radii, and responsive spacing preserve the supplied identity. The green panel emphasizes vision, numbered cream rows organize mission placeholders, and the return arrow indicates navigation. Darker text and borders retain contrast. Dials: ENERGY 1 / RHYTHM 2 / MOTION 1.
+
 ### Agenda Detail
 
 - `/agenda/detail` implements Pencil desktop `S3OWLQ` and mobile `LjtIz`. The existing agenda card opens this route.
