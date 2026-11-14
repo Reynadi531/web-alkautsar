@@ -73,14 +73,19 @@ export function EditorialDetail({
           </p>
           <ShareButton />
         </div>
-        <img
-          src={article.image}
-          alt={article.alt}
-          width={1200}
-          height={680}
-          fetchPriority="high"
-          className="h-[230px] w-full rounded-[7px] object-cover object-center md:h-[340px] lg:h-[450px]"
-        />
+        <picture>
+          {article.detailImage && (
+            <source media="(max-width: 767px)" srcSet={article.detailImage.mobile} />
+          )}
+          <img
+            src={article.detailImage?.desktop ?? article.image}
+            alt={article.alt}
+            width={1200}
+            height={680}
+            fetchPriority="high"
+            className="h-[230px] w-full rounded-[7px] object-cover object-center md:h-[340px] lg:h-[450px]"
+          />
+        </picture>
         <div className="mx-auto flex w-full max-w-[780px] flex-col gap-6">
           <p className="rounded-[5px] bg-ak-pale px-[18px] py-3.5 text-xs leading-[1.65] text-ak-muted">
             CONTOH KONTEN: teks berikut hanya memperlihatkan tata baca, bukan berita peristiwa atau

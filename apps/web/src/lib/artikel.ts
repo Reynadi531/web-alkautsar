@@ -2,6 +2,7 @@ export interface ArticleItem {
   id: number;
   title: string;
   image: string;
+  detailImage?: { desktop: string; mobile: string };
   alt: string;
   href: string;
 }
