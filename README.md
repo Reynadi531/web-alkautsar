@@ -86,6 +86,14 @@ This project was created with [Better-T-Stack](https://github.com/AmanVarshney01
 - Green/cream tokens and Plus Jakarta Sans preserve the supplied mosque identity; equal cards group peer samples, pale panels distinguish sample covers and unavailable documents, file/book icons identify reading materials, and arrows indicate navigation. Existing darker text/borders retain contrast. Dials: ENERGY 1 / RHYTHM 1 / MOTION 1. Content is static; no remote loading or download capability is invented.
 - Detail frames `zGibO` / `c53vf` use a 340 × 430px desktop sample cover, a full-width 350px-tall phone cover, and 380px/260px preview panels. The metadata stacks below the cover on phones; inactive reading/download controls stack at full width. Navigation arrows match Pencil; darker existing text preserves contrast. Detail dials: ENERGY 1 / RHYTHM 2 / MOTION 1.
 
+### Publikasi Masjid
+
+- `/publikasi` implements Pencil desktop `E5iOT` and mobile `IvYVb`: search/type/undated-period filters, two sample cards, validation notice, and official-publication empty state. Cards stack on phones and use two columns at wider widths.
+- `/publikasi/detail` and `?contoh=2` show the corresponding sample document with inactive reading/download controls until official files exist. Return and inquiry links open `/publikasi` and `/kontak`.
+- Publikasi is enabled in desktop/mobile content navigation. Catalog and detail components are shared with Pustaka; no confirmed publication, date, author, cover, or file is invented.
+- Pagination is omitted because only two samples exist. Search and filters combine; unmatched search offers reset. All samples have the same type and unconfirmed date status; no remote loading state is needed.
+- Green/cream tokens, Plus Jakarta Sans, responsive spacing, and restrained radii follow Pencil. Cards group peer documents; file/search icons identify content and actions; pale panels distinguish examples from official content. Existing darker text/borders retain contrast. Dials: ENERGY 1 / RHYTHM 1 / MOTION 1. Shared Indonesian-only header/footer remain unchanged.
+
 ### Kolom & Opini
 
 - `/kolom` implements Pencil desktop `TxsZ2` and mobile `P54mY`: search/category/undated-period controls, split editorial highlight, two sample cards, and the official-column empty state. Mobile stacks the highlight and cards; tablets use a two-column card grid.

@@ -1,7 +1,8 @@
 import { createFileRoute } from "@tanstack/react-router";
 
 import { PageHeader } from "../../components/page-header";
-import { PustakaBrowser } from "../../components/pustaka-browser";
+import { DocumentBrowser } from "../../components/document-browser";
+import { pustaka } from "../../lib/pustaka";
 import { site } from "../../lib/site";
 
 export const Route = createFileRoute("/pustaka/")({
@@ -26,7 +27,7 @@ function PustakaPage() {
         title="Pustaka Masjid"
         intro="Katalog pustaka untuk dibaca dan diakses setelah dokumen resmi tersedia."
       />
-      <PustakaBrowser />
+      <DocumentBrowser label="Pustaka" items={pustaka} metadata="Penulis: belum diberikan" />
     </div>
   );
 }
