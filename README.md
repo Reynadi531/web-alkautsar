@@ -102,6 +102,14 @@ This project was created with [Better-T-Stack](https://github.com/AmanVarshney01
 - Green/cream tokens, Plus Jakarta Sans, responsive spacing, and restrained radii follow Pencil. Cards group peer documents; file/search icons identify content and actions; pale panels distinguish examples from official content. Existing darker text/borders retain contrast. Dials: ENERGY 1 / RHYTHM 1 / MOTION 1. Shared Indonesian-only header/footer remain unchanged.
 - Detail typography, cover/preview dimensions, and spacing reuse the Pustaka detail layout to match the supplied frames; book/file icons distinguish the sample cover from the unavailable document. Darker existing text/borders preserve legibility; disabled labels use colons rather than em dashes. Detail dials: ENERGY 1 / RHYTHM 2 / MOTION 1.
 
+### Buletin Masjid
+
+- `/buletin` implements Pencil desktop `OF2Xe` and mobile `Idk9D`: search/type/undated-period filters, two sample editions, validation notice, and the official-archive empty state. Cards stack on phones and pair on tablets/desktop.
+- Samples live in `apps/web/src/lib/buletin.ts`. Search combines with filters; no matches offer reset. Pagination is omitted because only two sample records exist.
+- Both cards open `/buletin/detail` (second: `?contoh=2`) using the shared document detail, with unconfirmed edition metadata, unavailable preview, disabled reading/download controls, and return/contact links. No edition number, official document, date, or cover is invented.
+- Buletin is enabled in shared desktop/mobile content navigation. Existing Indonesian-only header/footer remain unchanged.
+- Green/cream tokens and Plus Jakarta Sans preserve Pencil identity; equal cards group peer editions, pale notices distinguish illustrative content, file/search icons identify documents/actions, and arrows signal navigation. Existing darker text and borders retain contrast. Dials: ENERGY 1 / RHYTHM 1 / MOTION 1. Static content needs no remote loading state.
+
 ### Kolom & Opini
 
 - `/kolom` implements Pencil desktop `TxsZ2` and mobile `P54mY`: search/category/undated-period controls, split editorial highlight, two sample cards, and the official-column empty state. Mobile stacks the highlight and cards; tablets use a two-column card grid.

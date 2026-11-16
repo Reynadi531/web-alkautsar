@@ -47,7 +47,11 @@ export function DocumentDetail({
             <dl className="flex flex-col gap-[18px]">
               {[
                 ["Judul", title],
-                label === "Publikasi" ? ["Jenis", label] : ["Penulis", "Belum diberikan"],
+                label === "Buletin"
+                  ? ["Nomor edisi", "Belum diberikan"]
+                  : label === "Publikasi"
+                    ? ["Jenis", label]
+                    : ["Penulis", "Belum diberikan"],
                 ["Kategori", "Contoh bacaan komunitas"],
                 ["Tanggal", "Belum dikonfirmasi"],
               ].map(([label, value]) => (

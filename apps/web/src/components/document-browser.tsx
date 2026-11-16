@@ -13,6 +13,8 @@ interface DocumentBrowserProps {
   items: readonly { id: number; title: string; href: string }[];
   categories?: readonly string[];
   metadata: string;
+  featuredHeading?: string;
+  archiveHeading?: string;
 }
 
 export function DocumentBrowser({
@@ -20,6 +22,8 @@ export function DocumentBrowser({
   items,
   categories = defaultCategories,
   metadata,
+  featuredHeading = `${label} pilihan`,
+  archiveHeading = `Seluruh ${label.toLocaleLowerCase("id")}`,
 }: DocumentBrowserProps) {
   const [query, setQuery] = useState("");
   const [category, setCategory] = useState(categories[0]!);
@@ -46,7 +50,7 @@ export function DocumentBrowser({
       >
         <SearchField value={query} onChange={setQuery} />
         <SelectField
-          label={label === "Publikasi" ? "Jenis" : "Kategori"}
+          label={label === "Publikasi" || label === "Buletin" ? "Jenis" : "Kategori"}
           value={category}
           options={categories}
           onChange={setCategory}
@@ -66,7 +70,7 @@ export function DocumentBrowser({
         className="flex flex-col gap-7 lg:gap-9"
       >
         <h2 id={`${label.toLocaleLowerCase("id")}-pilihan-title`} className={headingClass}>
-          {label} pilihan
+          {featuredHeading}
         </h2>
         {results.length > 0 ? (
           <div className="grid gap-5 md:grid-cols-2 lg:gap-7">
@@ -130,7 +134,7 @@ export function DocumentBrowser({
         className="flex flex-col gap-7 lg:gap-9"
       >
         <h2 id={`seluruh-${label.toLocaleLowerCase("id")}-title`} className={headingClass}>
-          Seluruh {label.toLocaleLowerCase("id")}
+          {archiveHeading}
         </h2>
         <EmptyState
           title={`Belum ada ${label.toLocaleLowerCase("id")} resmi`}
