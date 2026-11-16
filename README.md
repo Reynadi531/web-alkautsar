@@ -109,6 +109,13 @@ This project was created with [Better-T-Stack](https://github.com/AmanVarshney01
 - Results index available site pages and confirmed address information, not unconfirmed sample articles, events, or recordings. Matching is case-insensitive and requires all query words. Empty input prompts for a query rather than listing everything.
 - Existing green/cream tokens, Plus Jakarta Sans, responsive spacing, and pale empty-state panel follow Pencil. Search icons identify the task; arrows signal navigation/submission; existing darker text/borders preserve contrast. Dials: ENERGY 1 / RHYTHM 1 / MOTION 1. Search is local and synchronous; no remote loading/error state is introduced.
 
+### Program Masjid
+
+- `/program/detail` implements Pencil desktop `Cln7q` and mobile `K0bw9`: original congregation photo, purpose/audience copy, unconfirmed participation details, and inactive-registration notice. Desktop uses two columns and the exported photo crop; mobile contains the full photo and stacks the information panel.
+- Return links open `/program`, using the supplied listing designs `GQHjQ` / `qGnIk` so the detail page has a working destination. Program is enabled in desktop/mobile navigation and the footer; inquiry opens `/kontak`.
+- All program content remains explicitly illustrative. No schedule, contact, registration, or official program is invented. Content is static; no remote loading/error state is introduced.
+- Existing green/cream tokens and Plus Jakarta Sans preserve mosque identity; the pale panel groups participation details, whitespace separates purpose from logistics, and arrows identify navigation. Page-local darker text and borders retain contrast. Dials: ENERGY 1 / RHYTHM 2 / MOTION 1.
+
 ## Getting Started
 
 First, install the dependencies:

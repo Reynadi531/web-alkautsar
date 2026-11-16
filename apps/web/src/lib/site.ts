@@ -41,7 +41,7 @@ export const navGroups: readonly NavGroup[] = [
     items: [
       { label: "Agenda", href: "/agenda" },
       { label: "Seminar", href: "/seminar", unavailable: true },
-      { label: "Program", href: "/program", unavailable: true },
+      { label: "Program", href: "/program" },
       { label: "Berita / Kabar", href: "/berita" },
     ],
   },
@@ -71,7 +71,7 @@ export const topNav: readonly (NavLinkItem | NavGroup)[] = [
   { label: "Beranda", href: "/" },
   navGroups[0]!,
   navGroups[1]!,
-  { label: "Program", href: "/program", unavailable: true },
+  { label: "Program", href: "/program" },
   navGroups[2]!,
   navGroups[3]!,
 ];
@@ -79,7 +79,7 @@ export const topNav: readonly (NavLinkItem | NavGroup)[] = [
 export const footerExplore: readonly NavLinkItem[] = [
   { label: "Profil", href: "/profil" },
   { label: "Agenda & seminar", href: "/agenda" },
-  { label: "Program", href: "/program", unavailable: true },
+  { label: "Program", href: "/program" },
   { label: "Berita / kabar", href: "/berita" },
 ];
 
