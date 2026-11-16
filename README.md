@@ -89,10 +89,11 @@ This project was created with [Better-T-Stack](https://github.com/AmanVarshney01
 ### Publikasi Masjid
 
 - `/publikasi` implements Pencil desktop `E5iOT` and mobile `IvYVb`: search/type/undated-period filters, two sample cards, validation notice, and official-publication empty state. Cards stack on phones and use two columns at wider widths.
-- `/publikasi/detail` and `?contoh=2` show the corresponding sample document with inactive reading/download controls until official files exist. Return and inquiry links open `/publikasi` and `/kontak`.
+- `/publikasi/detail` implements Pencil desktop `RMeQA` and mobile `pBWm8`: sample cover beside metadata on desktop, stacked on mobile, followed by the unavailable preview and disabled reading/download controls. Publication metadata shows `Jenis: Publikasi`; `?contoh=2` retains the second sample. Return and inquiry links open `/publikasi` and `/kontak`.
 - Publikasi is enabled in desktop/mobile content navigation. Catalog and detail components are shared with Pustaka; no confirmed publication, date, author, cover, or file is invented.
 - Pagination is omitted because only two samples exist. Search and filters combine; unmatched search offers reset. All samples have the same type and unconfirmed date status; no remote loading state is needed.
 - Green/cream tokens, Plus Jakarta Sans, responsive spacing, and restrained radii follow Pencil. Cards group peer documents; file/search icons identify content and actions; pale panels distinguish examples from official content. Existing darker text/borders retain contrast. Dials: ENERGY 1 / RHYTHM 1 / MOTION 1. Shared Indonesian-only header/footer remain unchanged.
+- Detail typography, cover/preview dimensions, and spacing reuse the Pustaka detail layout to match the supplied frames; book/file icons distinguish the sample cover from the unavailable document. Darker existing text/borders preserve legibility; disabled labels use colons rather than em dashes. Detail dials: ENERGY 1 / RHYTHM 2 / MOTION 1.
 
 ### Kolom & Opini
 
