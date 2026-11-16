@@ -148,6 +148,12 @@ This project was created with [Better-T-Stack](https://github.com/AmanVarshney01
 - All program content remains explicitly illustrative. No schedule, contact, registration, or official program is invented. Content is static; no remote loading/error state is introduced.
 - Existing green/cream tokens and Plus Jakarta Sans preserve mosque identity; the pale panel groups participation details, whitespace separates purpose from logistics, and arrows identify navigation. Page-local darker text and borders retain contrast. Dials: ENERGY 1 / RHYTHM 2 / MOTION 1.
 
+### Browser QA fixes
+
+- Video samples are non-interactive until official recordings exist. Playback-unavailable labels replace links to the missing `/video/tonton` route; no player or recording is fabricated.
+- Muted text, brown labels, and control borders use the existing darker palette globally, including Profil, Agenda, Video, and shared navigation. Redundant page-local overrides are removed.
+- Turbo caches Nitro's `.output/**` build artifacts rather than the unused `dist/**` directory.
+
 ## Getting Started
 
 First, install the dependencies:

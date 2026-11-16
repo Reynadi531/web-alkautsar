@@ -1,5 +1,3 @@
-import { buttonVariants } from "@web-alkautsar/ui/components/button";
-import { ArrowUpRight, CirclePlay } from "lucide-react";
 import { useMemo, useState } from "react";
 
 import {
@@ -63,19 +61,14 @@ export function VideoBrowser() {
               className="absolute inset-0 size-full object-cover"
             />
             <div aria-hidden="true" className="absolute inset-0 bg-ak-dark/[0.47]" />
-            <CirclePlay aria-hidden="true" className="relative size-[54px] text-white" />
             <h3 className="relative text-[23px] leading-[1.65] font-semibold text-white lg:text-[32px]">
               {featured.title}
             </h3>
             <p className="relative text-[11px] leading-[1.65] text-[#e0ebdd]">{featured.meta}</p>
           </div>
-          <a
-            href={featured.href}
-            className={`${buttonVariants({ variant: "outline", size: "lg" })} self-start`}
-          >
-            Lihat tampilan pemutaran
-            <ArrowUpRight aria-hidden="true" />
-          </a>
+          <p className="text-xs leading-[1.65] text-ak-muted">
+            Pemutaran belum tersedia. Rekaman video resmi belum diberikan.
+          </p>
         </section>
       )}
 

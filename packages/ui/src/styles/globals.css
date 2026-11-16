@@ -10,14 +10,14 @@
   --ak-dark: #123b32;
   --ak-cream: #f8f7f2;
   --ak-pale: #edf2e9;
-  --ak-muted: #6d7d73;
-  --ak-brown: #98774d;
+  --ak-muted: #596a60;
+  --ak-brown: #806039;
   --ak-sage: #e7efe2;
   --ak-mist: #f8faf5;
   --ak-line: #e3e7dd;
-  --ak-border: #b9c9bb;
+  --ak-border: #829589;
   --ak-divider: #dce5d7;
-  --ak-field: #d5dfd4;
+  --ak-field: #829589;
   --ak-icon: #628263;
   --ak-body: #7b8578;
   --ak-chip: #f3ead0;
@@ -28,7 +28,7 @@
   --ak-footer-head: #e3ebdf;
   --ak-footer-rule: #376052;
   --ak-ring-line: #93ac8c;
-  --ak-button-line: #9ab3a4;
+  --ak-button-line: #829589;
 
   --background: #ffffff;
   --foreground: var(--ak-dark);

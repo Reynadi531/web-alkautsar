@@ -8,7 +8,6 @@ export interface VideoItem {
   title: string;
   meta: string;
   summary: string;
-  href: string;
   image: { src: string; alt: string };
   /** Contoh konten: not a real recording yet. */
   sample?: boolean;
@@ -21,7 +20,6 @@ export const featuredVideo: VideoItem = {
   title: "Mengenal Masjid Al-Kautsar",
   meta: "CONTOH KONTEN · video dan durasi belum tersedia",
   summary: "Pengenalan singkat masjid dan kegiatan jamaah.",
-  href: "/video/tonton",
   image: {
     src: "/images/jamaah-masjid.webp",
     alt: "Jamaah duduk bersama di dalam masjid pada siang hari",
@@ -35,7 +33,6 @@ export const otherVideos: readonly VideoItem[] = [
     title: "Potret bangunan masjid",
     meta: "Durasi dan tanggal belum diberikan",
     summary: "Thumbnail contoh memakai foto masjid asli.",
-    href: "/video/tonton",
     image: {
       src: "/images/masjid-tampak-depan.webp",
       alt: "Tampak depan bangunan Masjid Al-Kautsar",
@@ -47,7 +44,6 @@ export const otherVideos: readonly VideoItem[] = [
     title: "Di lingkungan Pharmindo",
     meta: "Durasi dan tanggal belum diberikan",
     summary: "Contoh konten — bukan rekaman video yang sudah tersedia.",
-    href: "/video/tonton?contoh=2",
     image: {
       src: "/images/masjid-udara.webp",
       alt: "Pandangan udara Masjid Al-Kautsar di lingkungan Pharmindo",
