@@ -2,7 +2,13 @@ import { CalendarDays } from "lucide-react";
 
 import type { AgendaEvent } from "../../lib/agenda";
 
-export function AgendaCard({ event }: { event: AgendaEvent }) {
+export function AgendaCard({
+  event,
+  priority = false,
+}: {
+  event: AgendaEvent;
+  priority?: boolean;
+}) {
   return (
     <article className="group relative flex flex-col overflow-hidden rounded-[7px] border border-ak-line bg-white">
       <div className="relative flex h-[185px] items-end p-4">
@@ -11,7 +17,8 @@ export function AgendaCard({ event }: { event: AgendaEvent }) {
           alt={event.image.alt}
           width={1200}
           height={540}
-          loading="lazy"
+          loading={priority ? "eager" : "lazy"}
+          fetchPriority={priority ? "high" : undefined}
           className="absolute inset-0 size-full object-cover object-[50%_53%]"
         />
         {event.sample && (

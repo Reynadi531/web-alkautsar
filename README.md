@@ -104,6 +104,14 @@ This project was created with [Better-T-Stack](https://github.com/AmanVarshney01
 - Kolom is enabled in existing desktop/mobile content navigation. The Indonesian-only shared header/footer remain unchanged.
 - Existing green/cream tokens and Plus Jakarta Sans preserve Pencil identity; the split highlight establishes hierarchy, equal cards group peer samples, pale notices identify unconfirmed content, and search/newspaper/share icons identify actions. Existing darker text and control borders retain contrast. Dials: ENERGY 1 / RHYTHM 2 / MOTION 1. Content is static; no remote loading state is introduced.
 
+### Seminar & Diskusi
+
+- `/seminar` implements Pencil desktop `Ix1z0` and mobile `Wd9ZD`: search/theme/period controls, featured sample, upcoming-event empty state, archive notice, and three archive rows. Phones stack the feature and upcoming status; tablets use two columns.
+- Search is case-insensitive and combines with theme and period filters. Archive categories reuse `apps/web/src/lib/agenda.ts`; the undated seminar sample lives in `apps/web/src/lib/seminar.ts`. No-match results offer reset. Pagination is omitted because only three archive records exist.
+- The featured card opens `/seminar/detail`, using linked Pencil frames `fRVY0` / `vrIRT`: sample photo, unconfirmed event information, description, unavailable-material panel, and related-agenda empty state. Return, agenda, and inquiry links open `/seminar`, `/agenda`, and `/kontak`.
+- Seminar is enabled in shared desktop/mobile Kegiatan navigation. Existing Indonesian-only header/footer remain unchanged. No event date, speaker, registration, or download is invented; content is static, with no remote loading state.
+- Existing green/cream tokens and Plus Jakarta Sans preserve Pencil identity. The bordered card groups the sample, pale panels distinguish unavailable information, archive/calendar/file icons identify content, and arrows signal navigation. Darker existing text/control-border tokens retain legibility. Dials: ENERGY 1 / RHYTHM 2 / MOTION 1.
+
 ### Donasi untuk Masjid
 
 - `/donasi` implements Pencil desktop `CA4sQ` and mobile `E31Rjk`: validation notice, donation-purpose empty state, QRIS placeholder, bank-information panel, three guidance steps, and contact link.

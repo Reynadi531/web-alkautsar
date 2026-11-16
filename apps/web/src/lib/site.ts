@@ -40,7 +40,7 @@ export const navGroups: readonly NavGroup[] = [
     href: "/agenda",
     items: [
       { label: "Agenda", href: "/agenda" },
-      { label: "Seminar", href: "/seminar", unavailable: true },
+      { label: "Seminar", href: "/seminar" },
       { label: "Program", href: "/program" },
       { label: "Berita / Kabar", href: "/berita" },
     ],
