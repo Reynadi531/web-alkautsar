@@ -39,6 +39,13 @@ This project was created with [Better-T-Stack](https://github.com/AmanVarshney01
 - Green/cream tokens, Plus Jakarta Sans, restrained corner radii, relevant location/conversation icons, and responsive spacing follow the supplied design. Equal cards present peer examples, while the pale notice and empty state distinguish unconfirmed official content. Page-local darker text and control borders improve legibility. Dials: ENERGY 1 / RHYTHM 1 / MOTION 1.
 - Detail-page green/cream tokens, Plus Jakarta Sans, restrained radii, and responsive spacing follow Pencil. The pale panel groups unavailable service details; the clock identifies scheduling, the numbered list preserves the supplied example sequence, and arrows signal navigation. Existing darker text/borders retain legibility. Dials: ENERGY 1 / RHYTHM 2 / MOTION 1. Content is static; no loading state or remote service data is introduced.
 
+### Kontak & Lokasi
+
+- `/kontak` implements Pencil desktop `nY3a0` and mobile `BSTSG`: address, unavailable-map panel, Instagram, unconfirmed contact channels, visit notice, and original mosque photos.
+- Desktop pairs address/map and communication panels, then shows both photos. Phones stack panels and show only the aerial photo; tablets use paired columns.
+- Direction and map links reuse the existing Google Maps destination; Instagram opens the existing mosque account. No embed, phone number, WhatsApp, email, or visiting hours are invented.
+- Shared navigation/footer remain Indonesian-only. Green/cream tokens and Plus Jakarta Sans preserve mosque identity; green emphasizes the confirmed social channel, pale panels separate unavailable information, map/social icons identify content, and arrows identify outbound links. Existing darker text/borders retain legibility. Dials: ENERGY 1 / RHYTHM 2 / MOTION 1. Static content introduces no remote loading state.
+
 ### Sejarah Masjid
 
 - `/profil/sejarah` implements Pencil desktop `oNcSw` and mobile `iJaFb`, using the existing site header and footer.
