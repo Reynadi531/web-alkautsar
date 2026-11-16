@@ -2,9 +2,11 @@ import { createFileRoute } from "@tanstack/react-router";
 
 import { ServiceBrowser } from "../../components/layanan/service-browser";
 import { PageHeader } from "../../components/page-header";
+import { getServices } from "../../lib/layanan";
 import { site } from "../../lib/site";
 
 export const Route = createFileRoute("/layanan/")({
+  loader: () => getServices(),
   head: () => ({
     meta: [
       { title: `Layanan Masjid | ${site.name}` },
@@ -18,6 +20,8 @@ export const Route = createFileRoute("/layanan/")({
 });
 
 function ServicePage() {
+  const services = Route.useLoaderData();
+
   return (
     <div className="service-page">
       <PageHeader
@@ -26,7 +30,7 @@ function ServicePage() {
         title="Layanan Masjid"
         intro="Informasi layanan dan cara mengaksesnya melalui pengurus masjid."
       />
-      <ServiceBrowser />
+      <ServiceBrowser services={services} />
     </div>
   );
 }

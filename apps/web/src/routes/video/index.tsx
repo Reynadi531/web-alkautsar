@@ -3,8 +3,10 @@ import { createFileRoute } from "@tanstack/react-router";
 import { PageHeader } from "../../components/page-header";
 import { VideoBrowser } from "../../components/video/video-browser";
 import { site } from "../../lib/site";
+import { getVideos } from "../../lib/video";
 
 export const Route = createFileRoute("/video/")({
+  loader: () => getVideos(),
   head: () => ({
     meta: [
       { title: `Video Masjid — ${site.name}` },
@@ -18,6 +20,8 @@ export const Route = createFileRoute("/video/")({
 });
 
 function VideoPage() {
+  const videos = Route.useLoaderData();
+
   return (
     <>
       <PageHeader
@@ -26,7 +30,7 @@ function VideoPage() {
         title="Video Masjid"
         intro="Ruang untuk dokumentasi dan video pilihan dari lingkungan masjid."
       />
-      <VideoBrowser />
+      <VideoBrowser videos={videos} />
     </>
   );
 }

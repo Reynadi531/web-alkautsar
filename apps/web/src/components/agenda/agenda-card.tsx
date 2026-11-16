@@ -11,16 +11,18 @@ export function AgendaCard({
 }) {
   return (
     <article className="group relative flex flex-col overflow-hidden rounded-[7px] border border-ak-line bg-white">
-      <div className="relative flex h-[185px] items-end p-4">
-        <img
-          src={event.image.src}
-          alt={event.image.alt}
-          width={1200}
-          height={540}
-          loading={priority ? "eager" : "lazy"}
-          fetchPriority={priority ? "high" : undefined}
-          className="absolute inset-0 size-full object-cover object-[50%_53%]"
-        />
+      <div className="relative flex h-[185px] items-end bg-ak-cream p-4">
+        {event.image && (
+          <img
+            src={event.image.src}
+            alt={event.image.alt}
+            width={1200}
+            height={540}
+            loading={priority ? "eager" : "lazy"}
+            fetchPriority={priority ? "high" : undefined}
+            className="absolute inset-0 size-full object-cover object-[50%_53%]"
+          />
+        )}
         {event.sample && (
           <span className="relative rounded-[3px] bg-ak-cream px-2 py-[5px] text-[9px] leading-[1.65] font-semibold text-ak-brown">
             CONTOH KONTEN
@@ -40,7 +42,9 @@ export function AgendaCard({
           </a>
         </h3>
         <p className="text-[11px] leading-[1.65] text-ak-muted">{event.schedule}</p>
-        <p className="text-[13px] leading-[1.65] text-ak-muted">{event.summary}</p>
+        {event.summary && (
+          <p className="text-[13px] leading-[1.65] text-ak-muted">{event.summary}</p>
+        )}
         <div
           aria-hidden="true"
           className="flex h-12 items-center gap-2 text-xs font-semibold text-primary group-hover:underline"

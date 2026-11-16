@@ -1,6 +1,22 @@
 name: web-alkautsar
 
 services:
+  cms:
+    build:
+      context: .
+      dockerfile: apps/cms/Dockerfile
+    ports:
+      - "8090:8090"
+    volumes:
+      - cms_data:/pb/pb_data
+    healthcheck:
+      test: ["CMD", "wget", "-q", "--spider", "http://127.0.0.1:8090/api/health"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+    restart: unless-stopped
+
   web:
     build:
       context: .
@@ -13,6 +29,14 @@ services:
     env_file:
       - path: apps/web/.env
         required: false
+    environment:
+      # Server-side API calls stay on the compose network; browsers load
+      # uploaded files from the public address.
+      POCKETBASE_URL: http://cms:8090
+      POCKETBASE_PUBLIC_URL: ${POCKETBASE_PUBLIC_URL:-http://localhost:8090}
+    depends_on:
+      cms:
+        condition: service_healthy
     healthcheck:
       test:
         [
@@ -31,3 +55,6 @@ services:
 secrets:
   web_env:
     file: apps/web/.env
+
+volumes:
+  cms_data:

@@ -3,16 +3,17 @@ import { buttonVariants } from "@web-alkautsar/ui/components/button";
 import { ArrowUpRight } from "lucide-react";
 
 import { PageHeader } from "../../components/page-header";
+import { getVisionMission } from "../../lib/profil";
 import { site } from "../../lib/site";
 
 export const Route = createFileRoute("/profil/visi-misi")({
+  loader: () => getVisionMission(),
   head: () => ({
     meta: [
       { title: `Visi dan Misi | ${site.name}` },
       {
         name: "description",
-        content:
-          "Landasan bersama bagi kegiatan dan pengelolaan masjid. Rumusan resmi menunggu konfirmasi pengurus.",
+        content: "Landasan bersama bagi kegiatan dan pengelolaan masjid.",
       },
     ],
   }),
@@ -20,6 +21,8 @@ export const Route = createFileRoute("/profil/visi-misi")({
 });
 
 function VisionMissionPage() {
+  const { vision, visionNote, missions, sample } = Route.useLoaderData();
+
   return (
     <div className="vision-mission-page">
       <PageHeader
@@ -30,14 +33,16 @@ function VisionMissionPage() {
       />
 
       <div className="flex flex-col items-start gap-7 px-[26px] pt-8 pb-10 lg:gap-9 lg:px-19 lg:pt-[52px] lg:pb-16">
-        <aside
-          id="catatan-validasi"
-          aria-label="Catatan validasi visi dan misi"
-          className="w-full rounded-[5px] bg-ak-pale px-[18px] py-3.5 text-xs leading-[1.65] text-ak-muted"
-        >
-          Rumusan visi dan misi resmi belum diberikan. Tidak ada pernyataan di halaman ini yang
-          dianggap telah disahkan.
-        </aside>
+        {sample && (
+          <aside
+            id="catatan-validasi"
+            aria-label="Catatan validasi visi dan misi"
+            className="w-full rounded-[5px] bg-ak-pale px-[18px] py-3.5 text-xs leading-[1.65] text-ak-muted"
+          >
+            Rumusan visi dan misi resmi belum diberikan. Tidak ada pernyataan di halaman ini yang
+            dianggap telah disahkan.
+          </aside>
+        )}
 
         <div id="visi-dan-misi" className="grid w-full items-start gap-5 md:grid-cols-2 lg:gap-7">
           <section
@@ -52,11 +57,13 @@ function VisionMissionPage() {
               VISI
             </h2>
             <p className="text-[26px] leading-[1.65] font-semibold text-white lg:text-[34px]">
-              Rumusan visi resmi masjid
+              {vision ?? "Rumusan visi resmi masjid"}
             </p>
-            <p className="text-sm leading-[1.65] text-ak-on-dark">
-              Menunggu teks resmi dari pengurus Masjid Al-Kautsar Pharmindo.
-            </p>
+            {(visionNote || !vision) && (
+              <p className="text-sm leading-[1.65] text-ak-on-dark">
+                {visionNote ?? "Menunggu teks resmi dari pengurus Masjid Al-Kautsar Pharmindo."}
+              </p>
+            )}
           </section>
 
           <section id="misi" aria-labelledby="judul-misi" className="flex flex-col gap-5">
@@ -66,24 +73,31 @@ function VisionMissionPage() {
             >
               Misi
             </h2>
-            <ol aria-label="Butir misi, menunggu konfirmasi resmi" className="flex flex-col gap-5">
-              {["01", "02", "03"].map((number) => (
-                <li
-                  key={number}
-                  className="flex items-start gap-[18px] rounded-[5px] bg-ak-cream p-[22px]"
-                >
-                  <span
-                    aria-hidden="true"
-                    className="w-9 shrink-0 text-lg leading-[1.65] font-semibold text-ak-brown"
+            {missions.length > 0 ? (
+              <ol
+                aria-label={sample ? "Butir misi, menunggu konfirmasi resmi" : "Butir misi"}
+                className="flex flex-col gap-5"
+              >
+                {missions.map((mission, index) => (
+                  <li
+                    key={index}
+                    className="flex items-start gap-[18px] rounded-[5px] bg-ak-cream p-[22px]"
                   >
-                    {number}
-                  </span>
-                  <p className="text-sm leading-[1.65] text-ak-muted">
-                    Butir misi resmi akan ditambahkan setelah dikonfirmasi.
-                  </p>
-                </li>
-              ))}
-            </ol>
+                    <span
+                      aria-hidden="true"
+                      className="w-9 shrink-0 text-lg leading-[1.65] font-semibold text-ak-brown"
+                    >
+                      {String(index + 1).padStart(2, "0")}
+                    </span>
+                    <p className="text-sm leading-[1.65] text-ak-muted">{mission}</p>
+                  </li>
+                ))}
+              </ol>
+            ) : (
+              <p className="rounded-[5px] bg-ak-cream p-[22px] text-sm leading-[1.65] text-ak-muted">
+                Butir misi resmi akan ditambahkan setelah dikonfirmasi.
+              </p>
+            )}
           </section>
         </div>
 

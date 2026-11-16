@@ -1,3 +1,4 @@
+import { useContact } from "../lib/kontak";
 import { footerExplore, footerQuickAccess, site, type NavLinkItem } from "../lib/site";
 
 function FooterColumn({ title, links }: { title: string; links: readonly NavLinkItem[] }) {
@@ -32,6 +33,8 @@ function FooterColumn({ title, links }: { title: string; links: readonly NavLink
 }
 
 export function Footer() {
+  const contact = useContact();
+
   return (
     <footer
       id="footer"
@@ -41,7 +44,7 @@ export function Footer() {
         <div className="flex flex-col gap-3 lg:flex-1">
           <p className="text-sm leading-[1.55] font-semibold text-white uppercase">{site.name}</p>
           <address className="text-xs leading-[1.55] text-[#c6d6cb] not-italic">
-            {site.street} · Kelurahan Melong
+            {contact.street} · Kelurahan Melong
             <br />
             Cimahi Selatan, Kota Cimahi
           </address>
@@ -98,7 +101,7 @@ export function Footer() {
 
       <div className="hidden gap-5 text-[10px] leading-[1.55] text-[#b7cabe] lg:flex">
         <p className="flex-1">© {site.name}</p>
-        <p className="flex-1">{site.area}</p>
+        <p className="flex-1">{contact.area}</p>
       </div>
     </footer>
   );

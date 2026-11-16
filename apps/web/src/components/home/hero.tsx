@@ -3,9 +3,11 @@ import { cn } from "@web-alkautsar/ui/lib/utils";
 import { ArrowUpRight } from "lucide-react";
 
 import { SectionLabel } from "../section-label";
-import { site } from "../../lib/site";
+import { useContact } from "../../lib/kontak";
 
 export function Hero() {
+  const contact = useContact();
+
   return (
     <section id="hero" className="grid lg:min-h-[610px] lg:grid-cols-[792fr_648fr]">
       <div className="flex min-h-[418px] flex-col justify-between gap-5 bg-primary px-[26px] pt-10 pb-[26px] lg:min-h-0 lg:justify-center lg:gap-6 lg:bg-ak-pale lg:px-19 lg:py-20">
@@ -32,7 +34,7 @@ export function Hero() {
             <ArrowUpRight aria-hidden="true" />
           </a>
           <a
-            href={site.mapsUrl}
+            href={contact.mapsUrl}
             target="_blank"
             rel="noopener noreferrer"
             className={cn(
@@ -45,9 +47,9 @@ export function Hero() {
           </a>
         </div>
         <div className="flex items-center justify-between gap-3 border-t border-[#729688] pt-3 text-[9px] text-ak-on-dark lg:hidden">
-          <span className="tracking-[0.6px] uppercase">Melong · Cimahi Selatan</span>
+          <span className="tracking-[0.6px] uppercase">{contact.area}</span>
           <a
-            href={site.mapsUrl}
+            href={contact.mapsUrl}
             target="_blank"
             rel="noopener noreferrer"
             className="flex min-h-11 items-center hover:underline"
@@ -76,12 +78,12 @@ export function Hero() {
             Lokasi Masjid
           </p>
           <p className="text-xl leading-normal font-semibold text-white lg:text-[23px]">
-            Jl. Trowulan V, Blok T —
+            {contact.street} —
             <br />
-            Melong, Cimahi Selatan
+            {contact.area.replace(" · ", ", ")}
           </p>
           <a
-            href={site.mapsUrl}
+            href={contact.mapsUrl}
             target="_blank"
             rel="noopener noreferrer"
             className="w-fit py-1 text-[13px] leading-normal text-white hover:underline"

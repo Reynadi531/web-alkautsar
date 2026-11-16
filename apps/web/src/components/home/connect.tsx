@@ -1,10 +1,12 @@
 import { buttonVariants } from "@web-alkautsar/ui/components/button";
 import { cn } from "@web-alkautsar/ui/lib/utils";
 
-import { site } from "../../lib/site";
+import { useContact } from "../../lib/kontak";
 import { InstagramIcon } from "../instagram-icon";
 
 export function Connect() {
+  const { instagramUrl, instagramHandle } = useContact();
+
   return (
     <section
       id="tetap-terhubung"
@@ -33,18 +35,20 @@ export function Connect() {
           Al-Kautsar Pharmindo.
         </span>
       </p>
-      <a
-        href={site.instagramUrl}
-        target="_blank"
-        rel="noopener noreferrer"
-        className={cn(
-          buttonVariants({ variant: "inverse" }),
-          "relative border-transparent px-0 text-[11px] lg:border-ak-button-line lg:px-5 lg:text-[13px]",
-        )}
-      >
-        {site.instagramHandle}
-        <InstagramIcon />
-      </a>
+      {instagramUrl && (
+        <a
+          href={instagramUrl}
+          target="_blank"
+          rel="noopener noreferrer"
+          className={cn(
+            buttonVariants({ variant: "inverse" }),
+            "relative border-transparent px-0 text-[11px] lg:border-ak-button-line lg:px-5 lg:text-[13px]",
+          )}
+        >
+          {instagramHandle ?? "Instagram"}
+          <InstagramIcon />
+        </a>
+      )}
     </section>
   );
 }

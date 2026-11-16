@@ -52,3 +52,89 @@
     transition-duration: 0s !important;
   }
 }
+
+/* Rich text authored in the CMS editor (components/rich-text.tsx). */
+.ak-richtext {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  font-size: 0.875rem;
+  line-height: 1.65;
+  color: var(--ak-muted);
+  overflow-wrap: anywhere;
+}
+
+.ak-richtext :is(h2, h3, h4) {
+  margin-top: 0.75rem;
+  font-weight: 600;
+  line-height: 1.4;
+  color: var(--ak-dark);
+}
+
+.ak-richtext > :first-child {
+  margin-top: 0;
+}
+
+.ak-richtext h2 {
+  font-size: 23px;
+}
+
+.ak-richtext h3 {
+  font-size: 19px;
+}
+
+.ak-richtext h4 {
+  font-size: 1rem;
+}
+
+.ak-richtext a {
+  color: var(--ak-green);
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
+
+.ak-richtext :is(ul, ol) {
+  display: flex;
+  flex-direction: column;
+  gap: 0.375rem;
+  padding-left: 1.25rem;
+}
+
+.ak-richtext ul {
+  list-style: disc;
+}
+
+.ak-richtext ol {
+  list-style: decimal;
+}
+
+.ak-richtext blockquote {
+  border-left: 3px solid var(--ak-divider);
+  padding-left: 1rem;
+  color: var(--ak-dark);
+}
+
+.ak-richtext img {
+  height: auto;
+  max-width: 100%;
+  border-radius: 7px;
+}
+
+.ak-richtext-lead > p:first-child {
+  font-size: 15px;
+  color: var(--ak-dark);
+}
+
+@media (min-width: 1024px) {
+  .ak-richtext {
+    font-size: 1rem;
+  }
+
+  .ak-richtext h2 {
+    font-size: 30px;
+  }
+
+  .ak-richtext-lead > p:first-child {
+    font-size: 17px;
+  }
+}

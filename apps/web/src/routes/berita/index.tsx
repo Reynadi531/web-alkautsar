@@ -2,10 +2,11 @@ import { createFileRoute } from "@tanstack/react-router";
 
 import { EditorialBrowser } from "../../components/editorial-browser";
 import { PageHeader } from "../../components/page-header";
-import { news } from "../../lib/berita";
 import { site } from "../../lib/site";
+import { getPosts } from "../../lib/tulisan";
 
 export const Route = createFileRoute("/berita/")({
+  loader: () => getPosts({ data: "berita" }),
   head: () => ({
     meta: [
       { title: `Berita & Kabar | ${site.name}` },
@@ -16,6 +17,8 @@ export const Route = createFileRoute("/berita/")({
 });
 
 function NewsPage() {
+  const items = Route.useLoaderData();
+
   return (
     <div className="article-page">
       <PageHeader
@@ -25,7 +28,7 @@ function NewsPage() {
         intro="Cerita, bacaan, dan kabar dari lingkungan masjid."
       />
       <EditorialBrowser
-        items={news}
+        items={items}
         label="Berita"
         featuredTitle="Berita utama"
         latestTitle="Berita terbaru"

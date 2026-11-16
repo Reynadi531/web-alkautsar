@@ -3,6 +3,7 @@ import { ArrowUpRight, Map, MapPinned } from "lucide-react";
 
 import { InstagramIcon } from "../components/instagram-icon";
 import { PageHeader } from "../components/page-header";
+import { useContact } from "../lib/kontak";
 import { site } from "../lib/site";
 
 export const Route = createFileRoute("/kontak")({
@@ -11,14 +12,31 @@ export const Route = createFileRoute("/kontak")({
       { title: `Kontak & Lokasi | ${site.name}` },
       {
         name: "description",
-        content: `${site.street}, ${site.fullAddress}. Informasi lokasi dan akun Instagram masjid.`,
+        content: "Alamat, petunjuk arah, dan kanal komunikasi Masjid Al-Kautsar Pharmindo.",
       },
     ],
   }),
   component: ContactPage,
 });
 
+/** wa.me needs digits only, with the Indonesian country code instead of a leading 0. */
+function toWhatsappNumber(value: string) {
+  const digits = value.replace(/\D/g, "");
+  return digits.startsWith("0") ? `62${digits.slice(1)}` : digits;
+}
+
 function ContactPage() {
+  const contact = useContact();
+  const channels = [
+    { label: "Telepon", value: contact.phone, href: contact.phone && `tel:${contact.phone}` },
+    {
+      label: "WhatsApp",
+      value: contact.whatsapp,
+      href: contact.whatsapp && `https://wa.me/${toWhatsappNumber(contact.whatsapp)}`,
+    },
+    { label: "Email", value: contact.email, href: contact.email && `mailto:${contact.email}` },
+  ];
+
   return (
     <div className="service-page">
       <PageHeader
@@ -41,38 +59,50 @@ function ContactPage() {
               {site.name}
             </h2>
             <address className="flex flex-col gap-[18px] not-italic">
-              <span className="text-[21px] leading-[1.65] font-semibold">{site.street}</span>
-              <span className="text-[15px] leading-[1.65] text-ak-muted">{site.fullAddress}</span>
+              <span className="text-[21px] leading-[1.65] font-semibold">{contact.street}</span>
+              <span className="text-[15px] leading-[1.65] text-ak-muted">
+                {contact.fullAddress}
+              </span>
             </address>
             <a
-              href={site.mapsUrl}
+              href={contact.mapsUrl}
               className="inline-flex min-h-12 items-center justify-center gap-2.5 rounded-[5px] bg-primary px-[18px] text-[13px] font-semibold text-white hover:bg-ak-dark"
             >
               Buka petunjuk arah{" "}
               <ArrowUpRight aria-hidden="true" className="size-[15px] shrink-0" />
             </a>
           </section>
-          <section
-            aria-labelledby="area-peta"
-            className="flex min-h-[300px] min-w-0 flex-col items-center justify-center gap-[18px] rounded-[7px] bg-ak-pale p-7 text-center lg:min-h-[410px]"
-          >
-            <Map aria-hidden="true" className="size-12 shrink-0 text-ak-muted" />
-            <h2 id="area-peta" className="text-[25px] leading-[1.65] font-semibold">
-              Area peta masjid
-            </h2>
-            <p className="text-[13px] leading-[1.65] text-ak-muted">
-              Pratinjau peta interaktif belum dimuat.
-              <br />
-              Gunakan petunjuk arah untuk mencari alamat masjid.
-            </p>
-            <a
-              href={site.mapsUrl}
-              className="inline-flex min-h-12 items-center justify-center gap-2.5 rounded-[5px] border border-ak-button-line px-[18px] text-[13px] font-semibold text-primary hover:bg-white"
+          {contact.mapEmbedUrl ? (
+            <iframe
+              src={contact.mapEmbedUrl}
+              title="Peta lokasi Masjid Al-Kautsar Pharmindo"
+              loading="lazy"
+              referrerPolicy="no-referrer-when-downgrade"
+              className="h-[300px] w-full min-w-0 rounded-[7px] border-0 bg-ak-pale lg:h-[410px]"
+            />
+          ) : (
+            <section
+              aria-labelledby="area-peta"
+              className="flex min-h-[300px] min-w-0 flex-col items-center justify-center gap-[18px] rounded-[7px] bg-ak-pale p-7 text-center lg:min-h-[410px]"
             >
-              Lihat di Google Maps{" "}
-              <ArrowUpRight aria-hidden="true" className="size-[15px] shrink-0" />
-            </a>
-          </section>
+              <Map aria-hidden="true" className="size-12 shrink-0 text-ak-muted" />
+              <h2 id="area-peta" className="text-[25px] leading-[1.65] font-semibold">
+                Area peta masjid
+              </h2>
+              <p className="text-[13px] leading-[1.65] text-ak-muted">
+                Pratinjau peta interaktif belum dimuat.
+                <br />
+                Gunakan petunjuk arah untuk mencari alamat masjid.
+              </p>
+              <a
+                href={contact.mapsUrl}
+                className="inline-flex min-h-12 items-center justify-center gap-2.5 rounded-[5px] border border-ak-button-line px-[18px] text-[13px] font-semibold text-primary hover:bg-white"
+              >
+                Lihat di Google Maps{" "}
+                <ArrowUpRight aria-hidden="true" className="size-[15px] shrink-0" />
+              </a>
+            </section>
+          )}
         </div>
         <h2
           id="kanal-komunikasi"
@@ -88,20 +118,30 @@ function ContactPage() {
             <InstagramIcon className="size-[26px] text-ak-on-dark" />
             <h3 className="text-2xl leading-[1.65] font-semibold">Instagram</h3>
             <p className="break-all text-sm leading-[1.65] text-ak-on-dark lg:text-[17px]">
-              {site.instagramHandle}
+              {contact.instagramHandle ?? "Belum diberikan"}
             </p>
-            <a
-              href={site.instagramUrl}
-              className="inline-flex min-h-12 items-center justify-center gap-2.5 rounded-[5px] border border-ak-button-line px-[18px] text-[13px] font-semibold hover:bg-ak-dark"
-            >
-              Buka Instagram <ArrowUpRight aria-hidden="true" className="size-[15px] shrink-0" />
-            </a>
+            {contact.instagramUrl && (
+              <a
+                href={contact.instagramUrl}
+                className="inline-flex min-h-12 items-center justify-center gap-2.5 rounded-[5px] border border-ak-button-line px-[18px] text-[13px] font-semibold hover:bg-ak-dark"
+              >
+                Buka Instagram <ArrowUpRight aria-hidden="true" className="size-[15px] shrink-0" />
+              </a>
+            )}
           </div>
           <dl className="flex flex-col gap-[18px] rounded-[7px] bg-ak-cream p-[26px]">
-            {["Telepon", "WhatsApp", "Email"].map((channel) => (
-              <div key={channel} className="flex flex-col gap-[18px]">
-                <dt className="text-[15px] leading-[1.65] font-semibold">{channel}</dt>
-                <dd className="text-xs leading-[1.65] text-ak-muted">Belum diberikan</dd>
+            {channels.map(({ label, value, href }) => (
+              <div key={label} className="flex flex-col gap-[18px]">
+                <dt className="text-[15px] leading-[1.65] font-semibold">{label}</dt>
+                <dd className="text-xs leading-[1.65] text-ak-muted">
+                  {value && href ? (
+                    <a href={href} className="break-all font-semibold text-primary hover:underline">
+                      {value}
+                    </a>
+                  ) : (
+                    "Belum diberikan"
+                  )}
+                </dd>
               </div>
             ))}
           </dl>
@@ -113,9 +153,9 @@ function ContactPage() {
           >
             Informasi kunjungan
           </h2>
-          <p className="text-sm leading-[1.65] text-ak-muted lg:text-base">
-            Jam kunjungan, akses rombongan, dan kontak pengelola belum dikonfirmasi. Periksa
-            informasi resmi sebelum merencanakan kunjungan khusus.
+          <p className="text-sm leading-[1.65] whitespace-pre-line text-ak-muted lg:text-base">
+            {contact.visitInfo ??
+              "Jam kunjungan, akses rombongan, dan kontak pengelola belum dikonfirmasi. Periksa informasi resmi sebelum merencanakan kunjungan khusus."}
           </p>
         </section>
         <section aria-label="Foto lingkungan masjid" className="grid gap-5 md:grid-cols-2">

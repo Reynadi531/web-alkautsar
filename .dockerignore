@@ -31,3 +31,7 @@ docker-compose.yml
 local.db
 local.db-*
 .data
+
+# PocketBase binary and local database
+apps/cms/.bin
+apps/cms/pb_data

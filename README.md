@@ -11,6 +11,28 @@ This project was created with [Better-T-Stack](https://github.com/AmanVarshney01
 - **Turborepo** - Optimized monorepo build system
 - **Oxlint** - Oxlint + Oxfmt (linting & formatting)
 
+### CMS (PocketBase)
+
+- `apps/cms` runs PocketBase v0.40.6 as the content backend. `bun run dev` starts it on `http://127.0.0.1:8090` next to the web app; the dashboard is at `/_/`. The binary is downloaded on first run by `apps/cms/scripts/pocketbase.sh`.
+- First run prints a one-time link for creating the superuser. Alternatively: `bun run --cwd apps/cms superuser EMAIL PASSWORD`. Editors work in the dashboard as superusers; visitors can only read.
+- The schema lives in `apps/cms/pb_migrations` and is applied on start. One collection per site menu, named in Indonesian:
+
+  | Menu           | Collections                                                                |
+  | -------------- | -------------------------------------------------------------------------- |
+  | Tentang Masjid | `profil`, `sejarah` + `tonggak_sejarah`, `visi_misi`, `pengurus`, `bidang` |
+  | Kegiatan       | `agenda`, `arsip_kegiatan`, `seminar`, `program`, `berita`                 |
+  | Konten         | `video`, `pustaka`, `publikasi`, `artikel`, `kolom`, `buletin`             |
+  | Lainnya        | `layanan`, `donasi` + `tujuan_donasi`, `kontak`                            |
+
+- `profil`, `sejarah`, `visi_misi`, `donasi`, and `kontak` hold exactly one row each; a second row is rejected (`pb_hooks/tunggal.pb.js`). `kontak` also feeds the footer, home page, and the coordinates used for prayer times.
+- `terbit` publishes a record: unticked records are drafts and are not served to the site. `contoh` marks placeholder content from the design; the site labels it `CONTOH KONTEN`, keeps the validation notices visible, and leaves it out of search. Untick `contoh` (or delete the record) once official material replaces it.
+- `slug` forms the page address (`/artikel/<slug>`). Leave it empty when creating a record and it is generated from the title (`pb_hooks/slug.pb.js`).
+- `misi`, `langkah_akses`, and `langkah` are plain text with one item per line. Editor fields are sanitized before rendering.
+- Agenda and seminar records whose `tanggal` has passed move from the upcoming list to the archive automatically.
+- The seed migration (`*_data_awal.js`) inserts the confirmed address and Instagram account plus the design's sample content, uploading photos from `apps/web/public/images`.
+- The web app reads the CMS on the server only (`apps/web/src/lib/cms.server.ts`). `POCKETBASE_URL` is the address the web server calls; `POCKETBASE_PUBLIC_URL` is the address browsers use for uploaded files. Both default to `http://127.0.0.1:8090` and are read at server start, not at build time.
+- If the CMS is unreachable, pages render their empty states, the confirmed address is shown from a built-in fallback, and detail pages return 404. Failures are logged as `cms.fetch`.
+
 ### Beranda
 
 - `/` implements Pencil desktop `jeYAp` and mobile `j1g948`, in Bahasa Indonesia only; no language switcher.
@@ -22,9 +44,9 @@ This project was created with [Better-T-Stack](https://github.com/AmanVarshney01
 ### Artikel Pilihan
 
 - `/artikel` implements Pencil desktop `C94Phy` and mobile `l4TUz`: editorial highlight, article cards, search, category/period filters, and the official-content empty state.
-- `/artikel/detail` implements Pencil desktop `U5Oup3` and mobile `VGZRS`: full-width cropped photo, metadata/share row (stacked on mobile), centered 780px reading column, and full-width related-content empty state. `?contoh=2` preserves the second sample's missing-manuscript state.
+- `/artikel/$slug` implements Pencil desktop `U5Oup3` and mobile `VGZRS`: full-width cropped photo, metadata/share row (stacked on mobile), centered 780px reading column, and full-width related-content empty state. The second sample (`/artikel/mengenal-lingkungan-masjid`) keeps the missing-manuscript state.
 - Both `Bagikan` buttons copy the current article URL, with pending, success, and clipboard-error feedback. `Kembali ke daftar` opens `/artikel`.
-- Content lives in `apps/web/src/lib/artikel.ts`. Samples have no confirmed author or publication date and are visibly labeled, not official publications.
+- Content lives in the CMS `artikel` collection. Samples have no confirmed author or publication date and are visibly labeled, not official publications.
 - No pagination is shown for the two available samples. Additional pages require additional content, not duplicate sample cards.
 - The existing green/cream palette and Plus Jakarta Sans follow the mosque design; the split highlight establishes hierarchy, while cards organize the remaining readings. Article-page text and control borders use darker shades for legibility.
 - Detail-page typography and spacing follow the supplied desktop/mobile designs; the narrow reading column improves readability, while the pale warning distinguishes illustrative text. Existing darker text/borders retain contrast; arrows indicate navigation and the share icon identifies link sharing. Dials: ENERGY 1 / RHYTHM 2 / MOTION 1. No asynchronous article data is fetched.
@@ -32,9 +54,9 @@ This project was created with [Better-T-Stack](https://github.com/AmanVarshney01
 ### Layanan Masjid
 
 - `/layanan` implements Pencil desktop `a3XXZR` and mobile `gVrZC`: validation notice, searchable sample cards, service filter, and the official-service empty state.
-- `/layanan/detail` implements Pencil desktop `ETdEQ` and mobile `K7Gb4t`: service description, numbered example access flow, unconfirmed schedule/contact panel, and original mosque photos. Desktop shows two columns and two photos; mobile stacks the panel and shows the exterior photo only. `?contoh=2` retains the corresponding sample title.
+- `/layanan/$slug` implements Pencil desktop `ETdEQ` and mobile `K7Gb4t`: service description, numbered example access flow, unconfirmed schedule/contact panel, and original mosque photos. Desktop shows two columns and two photos; mobile stacks the panel and shows the exterior photo only. Each service opens at its own slug.
 - Return and contact links open `/layanan` and `/kontak`. No service procedure, schedule, phone number, or booking capability is represented as confirmed.
-- Content lives in `apps/web/src/lib/layanan.ts`. The period control is disabled until service dates are confirmed; search and service filters combine, with a reset action for no matches.
+- Content lives in the CMS `layanan` collection. The period control stays disabled because services are not dated; search and service filters combine, with a reset action for no matches.
 - `/kontak` uses the existing site address, Instagram, and Google Maps destinations. No unverified phone number or booking action is shown.
 - Green/cream tokens, Plus Jakarta Sans, restrained corner radii, relevant location/conversation icons, and responsive spacing follow the supplied design. Equal cards present peer examples, while the pale notice and empty state distinguish unconfirmed official content. Page-local darker text and control borders improve legibility. Dials: ENERGY 1 / RHYTHM 1 / MOTION 1.
 - Detail-page green/cream tokens, Plus Jakarta Sans, restrained radii, and responsive spacing follow Pencil. The pale panel groups unavailable service details; the clock identifies scheduling, the numbered list preserves the supplied example sequence, and arrows signal navigation. Existing darker text/borders retain legibility. Dials: ENERGY 1 / RHYTHM 2 / MOTION 1. Content is static; no loading state or remote service data is introduced.
@@ -64,14 +86,14 @@ This project was created with [Better-T-Stack](https://github.com/AmanVarshney01
 ### Kepengurusan dan Bidang
 
 - `/profil/pengurus` implements Pencil desktop `t7CFL` and mobile `rQqKD`: four example roles, missing-photo icons, validation notice, and list/chart navigation.
-- Linked pages implement the existing chart (`Iganw` / `jWgWj`), department listing (`ldO7e` / `hTdwO`), and department detail (`sfX2z` / `tiT2s`) designs. `?contoh=2` selects Sosial & Kemasyarakatan; detail links return to the list or open `/kontak`.
+- Linked pages implement the existing chart (`Iganw` / `jWgWj`), department listing (`ldO7e` / `hTdwO`), and department detail (`sfX2z` / `tiT2s`) designs. Each department opens at `/profil/bidang/$slug`; detail links return to the list or open `/kontak`.
 - Desktop uses paired cards and chart peers; mobile stacks them without horizontal scrolling. Existing header/footer remain shared; Kepengurusan and Bidang are enabled in desktop/mobile profile navigation.
 - All roles, hierarchy, and departments remain explicitly illustrative. Names, photos, terms, contacts, and activities are not invented. Content is static, so no asynchronous loading/error state is introduced.
 - Green/cream tokens, Plus Jakarta Sans, spacing, and restrained radii preserve Pencil's identity. Cards group peer examples; arrows identify navigation or hierarchy; book/handshake icons distinguish department categories. Page-local darker text/borders improve contrast. Approved punctuation replaces em dashes. Dials: ENERGY 1 / RHYTHM 1 / MOTION 1.
 
 ### Agenda Detail
 
-- `/agenda/detail` implements Pencil desktop `S3OWLQ` and mobile `LjtIz`. The existing agenda card opens this route.
+- `/agenda/$slug` implements Pencil desktop `S3OWLQ` and mobile `LjtIz`. The existing agenda card opens this route.
 - Desktop pairs the existing congregation photo with the information panel; mobile stacks the cropped photo above it. Shared navigation and footer remain unchanged.
 - The design's sample warning, unconfirmed event details, inactive-registration notice, and related-agenda empty state remain explicit. Return and inquiry links open `/agenda` and `/kontak`; no registration is offered.
 - Existing green/cream tokens and Plus Jakarta Sans preserve mosque identity. The pale panel groups event facts; directional arrows mark navigation; page-local darker text and borders improve contrast. Dials: ENERGY 1 / RHYTHM 2 / MOTION 1.
@@ -79,16 +101,16 @@ This project was created with [Better-T-Stack](https://github.com/AmanVarshney01
 ### Berita & Kabar
 
 - `/berita` implements Pencil desktop `gRqz5` and mobile `nyOiO`: search/category/undated-period controls, featured news, two sample cards, and the official-news empty state. The highlight and cards stack on mobile.
-- Samples live in `apps/web/src/lib/berita.ts`. Dates, authors, and official publication status remain explicitly unconfirmed. Pagination is omitted because only two samples exist, not three pages of content.
-- Highlight/card links open `/berita/detail` and `?contoh=2`; the linked detail uses the existing editorial reading layout, supplied illustrative manuscript, copy-link sharing, and return navigation. The second sample retains the missing-manuscript state.
+- Samples are seeded into the CMS `berita` collection. Dates, authors, and official publication status remain explicitly unconfirmed. Pagination is omitted because only two samples exist, not three pages of content.
+- Highlight/card links open `/berita/$slug`; the linked detail uses the existing editorial reading layout, supplied illustrative manuscript, copy-link sharing, and return navigation. The second sample retains the missing-manuscript state.
 - News is enabled in existing desktop/mobile navigation and footer links. Article and news pages share `EditorialBrowser` and `EditorialDetail`, preserving article behavior without duplicate layouts.
 - Existing green/cream colors and Plus Jakarta Sans preserve mosque identity; the split highlight establishes editorial hierarchy, equal cards group peer samples, pale notices identify unconfirmed content, and relevant search/newspaper/share icons identify actions. Darker existing text and borders retain legibility. Dials: ENERGY 1 / RHYTHM 2 / MOTION 1. Content is static; no remote loading state is introduced.
 
 ### Pustaka Masjid
 
 - `/pustaka` implements Pencil desktop `gyoUC` and mobile `W5cfqo`: search, category/undated-period filters, two sample cards, validation notice, and official-library empty state. Cards stack on phones and use two columns on tablets and desktop.
-- Samples live in `apps/web/src/lib/pustaka.ts`. Search combines with filters and offers a reset for no matches. Both samples share the only known category and unconfirmed date status. Pagination is omitted because no additional records exist.
-- Card links open `/pustaka/detail` and `?contoh=2`, using the linked Pencil detail frames `zGibO` and `c53vf`. Return and inquiry links open `/pustaka` and `/kontak`; reading/download controls remain explicitly disabled until official files are supplied.
+- Samples are seeded into the CMS `pustaka` collection. Search combines with filters and offers a reset for no matches. Both samples share the only known category and unconfirmed date status. Pagination is omitted because no additional records exist.
+- Card links open `/pustaka/$slug`, using the linked Pencil detail frames `zGibO` and `c53vf`. Return and inquiry links open `/pustaka` and `/kontak`; reading/download controls stay disabled until a file is uploaded to the record's `berkas` field.
 - Pustaka is enabled in existing desktop/mobile navigation. Shared header/footer remain unchanged, including the existing Indonesian-only interface.
 - Green/cream tokens and Plus Jakarta Sans preserve the supplied mosque identity; equal cards group peer samples, pale panels distinguish sample covers and unavailable documents, file/book icons identify reading materials, and arrows indicate navigation. Existing darker text/borders retain contrast. Dials: ENERGY 1 / RHYTHM 1 / MOTION 1. Content is static; no remote loading or download capability is invented.
 - Detail frames `zGibO` / `c53vf` use a 340 × 430px desktop sample cover, a full-width 350px-tall phone cover, and 380px/260px preview panels. The metadata stacks below the cover on phones; inactive reading/download controls stack at full width. Navigation arrows match Pencil; darker existing text preserves contrast. Detail dials: ENERGY 1 / RHYTHM 2 / MOTION 1.
@@ -96,7 +118,7 @@ This project was created with [Better-T-Stack](https://github.com/AmanVarshney01
 ### Publikasi Masjid
 
 - `/publikasi` implements Pencil desktop `E5iOT` and mobile `IvYVb`: search/type/undated-period filters, two sample cards, validation notice, and official-publication empty state. Cards stack on phones and use two columns at wider widths.
-- `/publikasi/detail` implements Pencil desktop `RMeQA` and mobile `pBWm8`: sample cover beside metadata on desktop, stacked on mobile, followed by the unavailable preview and disabled reading/download controls. Publication metadata shows `Jenis: Publikasi`; `?contoh=2` retains the second sample. Return and inquiry links open `/publikasi` and `/kontak`.
+- `/publikasi/$slug` implements Pencil desktop `RMeQA` and mobile `pBWm8`: sample cover beside metadata on desktop, stacked on mobile, followed by the unavailable preview and disabled reading/download controls. Publication metadata shows `Jenis: Publikasi`. Return and inquiry links open `/publikasi` and `/kontak`.
 - Publikasi is enabled in desktop/mobile content navigation. Catalog and detail components are shared with Pustaka; no confirmed publication, date, author, cover, or file is invented.
 - Pagination is omitted because only two samples exist. Search and filters combine; unmatched search offers reset. All samples have the same type and unconfirmed date status; no remote loading state is needed.
 - Green/cream tokens, Plus Jakarta Sans, responsive spacing, and restrained radii follow Pencil. Cards group peer documents; file/search icons identify content and actions; pale panels distinguish examples from official content. Existing darker text/borders retain contrast. Dials: ENERGY 1 / RHYTHM 1 / MOTION 1. Shared Indonesian-only header/footer remain unchanged.
@@ -105,25 +127,25 @@ This project was created with [Better-T-Stack](https://github.com/AmanVarshney01
 ### Buletin Masjid
 
 - `/buletin` implements Pencil desktop `OF2Xe` and mobile `Idk9D`: search/type/undated-period filters, two sample editions, validation notice, and the official-archive empty state. Cards stack on phones and pair on tablets/desktop.
-- Samples live in `apps/web/src/lib/buletin.ts`. Search combines with filters; no matches offer reset. Pagination is omitted because only two sample records exist.
-- Both cards open `/buletin/detail` (second: `?contoh=2`) using the shared document detail, with unconfirmed edition metadata, unavailable preview, disabled reading/download controls, and return/contact links. No edition number, official document, date, or cover is invented.
+- Samples are seeded into the CMS `buletin` collection. Search combines with filters; no matches offer reset. Pagination is omitted because only two sample records exist.
+- Both cards open `/buletin/$slug` using the shared document detail, with unconfirmed edition metadata, unavailable preview, disabled reading/download controls, and return/contact links. No edition number, official document, date, or cover is invented.
 - Buletin is enabled in shared desktop/mobile content navigation. Existing Indonesian-only header/footer remain unchanged.
 - Green/cream tokens and Plus Jakarta Sans preserve Pencil identity; equal cards group peer editions, pale notices distinguish illustrative content, file/search icons identify documents/actions, and arrows signal navigation. Existing darker text and borders retain contrast. Dials: ENERGY 1 / RHYTHM 1 / MOTION 1. Static content needs no remote loading state.
 
 ### Kolom & Opini
 
 - `/kolom` implements Pencil desktop `TxsZ2` and mobile `P54mY`: search/category/undated-period controls, split editorial highlight, two sample cards, and the official-column empty state. Mobile stacks the highlight and cards; tablets use a two-column card grid.
-- Samples live in `apps/web/src/lib/kolom.ts`. Authors, dates, and official publication status remain explicitly unconfirmed. Pagination is omitted because only two samples exist.
-- `/kolom/detail` implements Pencil desktop `UglL5` and mobile `qC2nY`: supplied title capitalization, exported desktop/phone photo crops, metadata/share row (stacked on phones), centered 780px reading column, and full-width related-content empty state. Optional `detailImage` sources preserve existing listing thumbnails and article/news images.
-- Both share buttons copy the current URL with pending, success, and error feedback. The second sample (`?contoh=2`) retains its missing-manuscript state; return navigation opens `/kolom`.
+- Samples are seeded into the CMS `kolom` collection. Authors, dates, and official publication status remain explicitly unconfirmed. Pagination is omitted because only two samples exist.
+- `/kolom/$slug` implements Pencil desktop `UglL5` and mobile `qC2nY`: supplied title capitalization, exported desktop/phone photo crops, metadata/share row (stacked on phones), centered 780px reading column, and full-width related-content empty state. Optional `detailImage` sources preserve existing listing thumbnails and article/news images.
+- Both share buttons copy the current URL with pending, success, and error feedback. The second sample retains its missing-manuscript state; return navigation opens `/kolom`.
 - Kolom is enabled in existing desktop/mobile content navigation. The Indonesian-only shared header/footer remain unchanged.
 - Existing green/cream tokens and Plus Jakarta Sans preserve Pencil identity; the split highlight establishes hierarchy, equal cards group peer samples, pale notices identify unconfirmed content, and search/newspaper/share icons identify actions. Existing darker text and control borders retain contrast. Dials: ENERGY 1 / RHYTHM 2 / MOTION 1. Content is static; no remote loading state is introduced.
 
 ### Seminar & Diskusi
 
 - `/seminar` implements Pencil desktop `Ix1z0` and mobile `Wd9ZD`: search/theme/period controls, featured sample, upcoming-event empty state, archive notice, and three archive rows. Phones stack the feature and upcoming status; tablets use two columns.
-- Search is case-insensitive and combines with theme and period filters. Archive categories reuse `apps/web/src/lib/agenda.ts`; the undated seminar sample lives in `apps/web/src/lib/seminar.ts`. No-match results offer reset. Pagination is omitted because only three archive records exist.
-- The featured card opens `/seminar/detail`, using linked Pencil frames `fRVY0` / `vrIRT`: sample photo, unconfirmed event information, description, unavailable-material panel, and related-agenda empty state. Return, agenda, and inquiry links open `/seminar`, `/agenda`, and `/kontak`.
+- Search is case-insensitive and combines with theme and period filters. Archive rows come from the CMS `arsip_kegiatan` collection; the undated seminar sample is seeded into `seminar`. No-match results offer reset. Pagination is omitted because only three archive records exist.
+- The featured card opens `/seminar/$slug`, using linked Pencil frames `fRVY0` / `vrIRT`: sample photo, unconfirmed event information, description, unavailable-material panel, and related-agenda empty state. Return, agenda, and inquiry links open `/seminar`, `/agenda`, and `/kontak`.
 - Seminar is enabled in shared desktop/mobile Kegiatan navigation. Existing Indonesian-only header/footer remain unchanged. No event date, speaker, registration, or download is invented; content is static, with no remote loading state.
 - Existing green/cream tokens and Plus Jakarta Sans preserve Pencil identity. The bordered card groups the sample, pale panels distinguish unavailable information, archive/calendar/file icons identify content, and arrows signal navigation. Darker existing text/control-border tokens retain legibility. Dials: ENERGY 1 / RHYTHM 2 / MOTION 1.
 
@@ -143,7 +165,7 @@ This project was created with [Better-T-Stack](https://github.com/AmanVarshney01
 
 ### Program Masjid
 
-- `/program/detail` implements Pencil desktop `Cln7q` and mobile `K0bw9`: original congregation photo, purpose/audience copy, unconfirmed participation details, and inactive-registration notice. Desktop uses two columns and the exported photo crop; mobile contains the full photo and stacks the information panel.
+- `/program/$slug` implements Pencil desktop `Cln7q` and mobile `K0bw9`: original congregation photo, purpose/audience copy, unconfirmed participation details, and inactive-registration notice. Desktop uses two columns and the exported photo crop; mobile contains the full photo and stacks the information panel.
 - Return links open `/program`, using the supplied listing designs `GQHjQ` / `qGnIk` so the detail page has a working destination. Program is enabled in desktop/mobile navigation and the footer; inquiry opens `/kontak`.
 - All program content remains explicitly illustrative. No schedule, contact, registration, or official program is invented. Content is static; no remote loading/error state is introduced.
 - Existing green/cream tokens and Plus Jakarta Sans preserve mosque identity; the pale panel groups participation details, whitespace separates purpose from logistics, and arrows identify navigation. Page-local darker text and borders retain contrast. Dials: ENERGY 1 / RHYTHM 2 / MOTION 1.
@@ -210,8 +232,10 @@ Run standalone Node/Bun tools that use Varlock from the owning app directory so 
 
 ### Docker Compose
 
-- Target: web + server
+- Target: web + cms
 - Config: `docker-compose.yml` (app Dockerfiles live in `apps/*/Dockerfile`)
+- The `cms` service keeps its database and uploads in the `cms_data` volume and is published on port 8090. Create its superuser with `docker compose exec cms /pb/pocketbase superuser upsert EMAIL PASSWORD --dir=/pb/pb_data`.
+- Set `POCKETBASE_PUBLIC_URL` (shell or root `.env`) to the address browsers use to reach the CMS, e.g. `https://cms.example.org`; it defaults to `http://localhost:8090`. Back up the `cms_data` volume: it holds all content.
 - Build images: bun run docker:build
 - Start: bun run docker:up
 - Logs: bun run docker:logs
@@ -230,7 +254,8 @@ For more details, see the guide on [Deploying with Docker Compose](https://www.b
 ```
 web-alkautsar/
 ├── apps/
-│   └── web/         # Fullstack application (React + TanStack Start)
+│   ├── web/         # Fullstack application (React + TanStack Start)
+│   └── cms/         # PocketBase CMS: migrations, hooks, Dockerfile
 ├── packages/
 │   ├── ui/          # Shared shadcn/ui components and styles
 ```
@@ -240,6 +265,7 @@ web-alkautsar/
 - `bun run dev`: Start all applications in development mode
 - `bun run build`: Build all applications
 - `bun run dev:web`: Start only the web application
+- `bun run dev:cms`: Start only the PocketBase CMS
 - `bun run check-types`: Check TypeScript types across all apps
 - `bun run check`: Run Oxlint and Oxfmt
 - `bun run docker:build`: Build the Docker Compose images

@@ -1,14 +1,7 @@
+/** Identity and navigation. Address and contact channels come from the CMS (`lib/kontak.ts`). */
 export const site = {
   name: "Masjid Al-Kautsar Pharmindo",
   shortName: "Al-Kautsar",
-  area: "Melong · Cimahi Selatan",
-  street: "Jl. Trowulan V, Blok T",
-  fullAddress: "Kelurahan Melong, Kecamatan Cimahi Selatan, Kota Cimahi, Jawa Barat 40534",
-  instagramHandle: "@masjidalkautsar.pharmindo",
-  instagramUrl: "https://www.instagram.com/masjidalkautsar.pharmindo/",
-  mapsUrl:
-    "https://www.google.com/maps/search/?api=1&query=Masjid+Al-Kautsar+Pharmindo+Cimahi+Selatan",
-  coordinates: { latitude: -6.8841, longitude: 107.5413 },
 } as const;
 
 export interface NavLinkItem {
@@ -94,4 +87,35 @@ export const footerQuickAccess: readonly NavLinkItem[] = [
 export function isActivePath(pathname: string, href: string) {
   if (href === "/") return pathname === "/";
   return pathname === href || pathname.startsWith(`${href}/`);
+}
+
+/** Case-insensitive match of a search box value against any of the given fields. */
+export function matchesQuery(query: string, ...fields: (string | undefined)[]) {
+  const needle = query.trim().toLocaleLowerCase("id");
+  return needle === "" || fields.some((field) => field?.toLocaleLowerCase("id").includes(needle));
+}
+
+export const ALL_PERIODS = "Periode: semua";
+
+/** "Periode" select options: every year present in the given ISO dates, newest first. */
+export function periodOptions(dates: readonly (string | undefined)[]): string[] {
+  const years = new Set<string>();
+  for (const date of dates) if (date) years.add(date.slice(0, 4));
+  return [
+    ALL_PERIODS,
+    ...[...years]
+      .sort()
+      .reverse()
+      .map((year) => `Periode: ${year}`),
+  ];
+}
+
+export function matchesPeriod(date: string | undefined, period: string) {
+  if (period === ALL_PERIODS) return true;
+  return date !== undefined && `Periode: ${date.slice(0, 4)}` === period;
+}
+
+/** Select options: the "all" label followed by the distinct non-empty values. */
+export function categoryOptions(all: string, values: readonly (string | undefined)[]): string[] {
+  return [all, ...new Set(values.filter((value): value is string => Boolean(value)))];
 }

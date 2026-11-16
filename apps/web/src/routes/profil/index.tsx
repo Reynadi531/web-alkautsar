@@ -4,9 +4,11 @@ import { ArrowUpRight } from "lucide-react";
 
 import { PageHeader } from "../../components/page-header";
 import { SectionLabel } from "../../components/section-label";
+import { getProfile } from "../../lib/profil";
 import { site } from "../../lib/site";
 
 export const Route = createFileRoute("/profil/")({
+  loader: () => getProfile(),
   head: () => ({
     meta: [
       { title: `Tentang Masjid — ${site.name}` },
@@ -34,6 +36,8 @@ const exploreCards = [
 ] as const;
 
 function ProfilePage() {
+  const profile = Route.useLoaderData();
+
   return (
     <>
       <PageHeader
@@ -51,12 +55,13 @@ function ProfilePage() {
           <div className="flex flex-col items-start gap-5">
             <SectionLabel>Masjid Al-Kautsar Pharmindo</SectionLabel>
             <h2 className="text-[23px] leading-[1.4] font-semibold text-ak-dark lg:text-[30px]">
-              Dekat dengan warga, tumbuh dalam kebersamaan.
+              {profile.title ?? "Dekat dengan warga, tumbuh dalam kebersamaan."}
             </h2>
-            <p className="text-sm leading-[1.65] text-ak-muted lg:text-base">
-              Masjid Al-Kautsar berada di Komplek Pharmindo, Kelurahan Melong, Kecamatan Cimahi
-              Selatan, Kota Cimahi.
-            </p>
+            {profile.description && (
+              <p className="text-sm leading-[1.65] whitespace-pre-line text-ak-muted lg:text-base">
+                {profile.description}
+              </p>
+            )}
             <a href="/kontak" className={buttonVariants({ variant: "outline", size: "lg" })}>
               Kontak &amp; lokasi
               <ArrowUpRight aria-hidden="true" />

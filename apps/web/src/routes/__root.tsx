@@ -4,6 +4,7 @@ import { evlogErrorHandler } from "evlog/nitro/v3";
 
 import { Footer } from "../components/footer";
 import { Navbar } from "../components/navbar";
+import { getContact } from "../lib/kontak";
 import { site } from "../lib/site";
 
 import appCss from "../index.css?url";
@@ -14,6 +15,9 @@ export const Route = createRootRouteWithContext<RouterAppContext>()({
   server: {
     middleware: [createMiddleware().server(evlogErrorHandler)],
   },
+
+  // Address and contact channels for the navbar, footer, and every page (`useContact`).
+  loader: () => getContact(),
 
   head: () => ({
     meta: [

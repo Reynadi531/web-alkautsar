@@ -1,70 +1,49 @@
-export const ALL_VIDEOS = "Semua video";
-export const ALL_PERIODS = "Periode: semua";
+import { createServerFn } from "@tanstack/react-start";
 
-export const categoryOptions = [ALL_VIDEOS] as const;
+import { cmsDate, cmsImage, cmsList, cmsText } from "./cms.server";
+import { ALL_PERIODS, matchesPeriod, matchesQuery } from "./site";
+
+export const ALL_VIDEOS = "Semua video";
 
 export interface VideoItem {
   id: string;
   title: string;
   meta: string;
   summary: string;
-  image: { src: string; alt: string };
+  image?: { src: string; alt: string };
+  /** Link to the recording; absent until an official video exists. */
+  url?: string;
+  category?: string;
+  featured: boolean;
   /** Contoh konten: not a real recording yet. */
-  sample?: boolean;
-  /** ISO date (YYYY-MM-DD). Leave empty while the date is unknown. */
+  sample: boolean;
+  /** ISO date (YYYY-MM-DD); absent while the date is unknown. */
   date?: string;
 }
 
-export const featuredVideo: VideoItem = {
-  id: "mengenal-masjid-al-kautsar",
-  title: "Mengenal Masjid Al-Kautsar",
-  meta: "CONTOH KONTEN · video dan durasi belum tersedia",
-  summary: "Pengenalan singkat masjid dan kegiatan jamaah.",
-  image: {
-    src: "/images/jamaah-masjid.webp",
-    alt: "Jamaah duduk bersama di dalam masjid pada siang hari",
-  },
-  sample: true,
-};
-
-export const otherVideos: readonly VideoItem[] = [
-  {
-    id: "potret-bangunan-masjid",
-    title: "Potret bangunan masjid",
-    meta: "Durasi dan tanggal belum diberikan",
-    summary: "Thumbnail contoh memakai foto masjid asli.",
-    image: {
-      src: "/images/masjid-tampak-depan.webp",
-      alt: "Tampak depan bangunan Masjid Al-Kautsar",
-    },
-    sample: true,
-  },
-  {
-    id: "di-lingkungan-pharmindo",
-    title: "Di lingkungan Pharmindo",
-    meta: "Durasi dan tanggal belum diberikan",
-    summary: "Contoh konten — bukan rekaman video yang sudah tersedia.",
-    image: {
-      src: "/images/masjid-udara.webp",
-      alt: "Pandangan udara Masjid Al-Kautsar di lingkungan Pharmindo",
-    },
-    sample: true,
-  },
-];
-
-export function periodOptions(): string[] {
-  const years = new Set<string>();
-  for (const item of [featuredVideo, ...otherVideos]) {
-    if (item.date) years.add(item.date.slice(0, 4));
-  }
-  return [
-    ALL_PERIODS,
-    ...[...years]
-      .sort()
-      .reverse()
-      .map((year) => `Periode: ${year}`),
-  ];
-}
+export const getVideos = createServerFn({ method: "GET" }).handler(async () => {
+  const records = await cmsList("video", { sort: "-unggulan,urutan,-tanggal" });
+  return records.map((record): VideoItem => {
+    const { date, dateLabel } = cmsDate(record, "tanggal");
+    const duration = cmsText(record, "durasi");
+    const src = cmsImage(record, "thumbnail");
+    return {
+      id: record.id,
+      title: record.judul,
+      meta:
+        duration || dateLabel
+          ? [duration, dateLabel].filter(Boolean).join(" · ")
+          : "Durasi dan tanggal belum diberikan",
+      summary: cmsText(record, "ringkasan") ?? "",
+      image: src ? { src, alt: cmsText(record, "alt_thumbnail") ?? "" } : undefined,
+      url: cmsText(record, "url_video"),
+      category: cmsText(record, "kategori"),
+      featured: Boolean(record.unggulan),
+      sample: Boolean(record.contoh),
+      date,
+    };
+  });
+});
 
 export interface VideoFilters {
   query: string;
@@ -72,31 +51,20 @@ export interface VideoFilters {
   period: string;
 }
 
-function matchesPeriod(date: string | undefined, period: string) {
-  if (period === ALL_PERIODS) return true;
-  return Boolean(date) && `Periode: ${date!.slice(0, 4)}` === period;
-}
-
-function matchesQuery(query: string, ...fields: string[]) {
-  const needle = query.trim().toLowerCase();
-  return needle === "" || fields.some((field) => field.toLowerCase().includes(needle));
-}
-
-function matches(item: VideoItem, { query, period }: VideoFilters) {
-  return (
-    matchesPeriod(item.date, period) && matchesQuery(query, item.title, item.meta, item.summary)
+export function filterVideos(
+  videos: readonly VideoItem[],
+  { query, category, period }: VideoFilters,
+) {
+  const results = videos.filter(
+    (video) =>
+      (category === ALL_VIDEOS || video.category === category) &&
+      matchesPeriod(video.date, period) &&
+      matchesQuery(query, video.title, video.meta, video.summary),
   );
-}
-
-export function filterVideos(filters: VideoFilters) {
+  const featured = results.find((video) => video.featured) ?? null;
   return {
-    featured: matches(featuredVideo, filters) ? featuredVideo : null,
-    others: otherVideos.filter((video) => matches(video, filters)),
-    isFiltering:
-      filters.query.trim() !== "" ||
-      filters.category !== categoryOptions[0] ||
-      filters.period !== ALL_PERIODS,
+    featured,
+    others: results.filter((video) => video !== featured),
+    isFiltering: query.trim() !== "" || category !== ALL_VIDEOS || period !== ALL_PERIODS,
   };
 }
-
-export const hasOfficialVideos = [featuredVideo, ...otherVideos].some((video) => !video.sample);

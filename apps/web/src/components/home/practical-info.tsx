@@ -1,5 +1,6 @@
 import { Clock3, MapPinned } from "lucide-react";
 
+import { useContact } from "../../lib/kontak";
 import type { PrayerTimes } from "../../lib/prayer-times";
 import { site } from "../../lib/site";
 import { SectionLabel } from "../section-label";
@@ -64,6 +65,8 @@ function PrayerCard({ prayer }: { prayer: PrayerTimes }) {
 }
 
 function AddressCard() {
+  const contact = useContact();
+
   return (
     <div className="flex min-h-[360px] flex-col gap-[17px] bg-ak-cream px-[26px] py-9 lg:min-h-0 lg:rounded-lg lg:bg-white lg:p-7">
       <div className="flex flex-col gap-[17px] lg:hidden">
@@ -81,14 +84,14 @@ function AddressCard() {
       <div className="flex flex-col gap-3 rounded-[7px] bg-white p-5 lg:gap-[17px] lg:p-0">
         <h3 className="text-sm font-semibold text-ak-dark lg:hidden">{site.name}</h3>
         <p className="hidden text-xl leading-[1.6] font-bold text-ak-dark lg:block">
-          {site.street}
+          {contact.street}
         </p>
         <p className="text-xs leading-[1.7] text-ak-muted lg:text-sm lg:leading-[1.6]">
-          <span className="lg:hidden">{site.street} · </span>
-          {site.fullAddress}
+          <span className="lg:hidden">{contact.street} · </span>
+          {contact.fullAddress}
         </p>
         <a
-          href={site.mapsUrl}
+          href={contact.mapsUrl}
           target="_blank"
           rel="noopener noreferrer"
           className="flex min-h-11 w-fit items-center text-xs leading-[1.6] font-semibold text-primary hover:underline lg:min-h-0 lg:py-0.5 lg:text-[13px]"

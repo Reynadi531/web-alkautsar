@@ -2,10 +2,11 @@ import { createFileRoute } from "@tanstack/react-router";
 
 import { DocumentBrowser } from "../../components/document-browser";
 import { PageHeader } from "../../components/page-header";
-import { buletin } from "../../lib/buletin";
+import { getDocuments } from "../../lib/dokumen";
 import { site } from "../../lib/site";
 
 export const Route = createFileRoute("/buletin/")({
+  loader: () => getDocuments({ data: "buletin" }),
   head: () => ({
     meta: [
       { title: `Buletin Masjid | ${site.name}` },
@@ -15,9 +16,9 @@ export const Route = createFileRoute("/buletin/")({
   component: BuletinPage,
 });
 
-const categories = ["Semua jenis", "Buletin"];
-
 function BuletinPage() {
+  const items = Route.useLoaderData();
+
   return (
     <div className="pustaka-page">
       <PageHeader
@@ -28,9 +29,8 @@ function BuletinPage() {
       />
       <DocumentBrowser
         label="Buletin"
-        items={buletin}
-        categories={categories}
-        metadata="Nomor edisi: belum diberikan · Tanggal: belum diberikan"
+        items={items}
+        filterLabel="Jenis"
         featuredHeading="Edisi terbaru"
         archiveHeading="Arsip edisi"
       />

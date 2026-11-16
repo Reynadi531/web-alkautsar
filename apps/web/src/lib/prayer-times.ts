@@ -1,7 +1,7 @@
 import { createServerFn } from "@tanstack/react-start";
 import { z } from "zod";
 
-import { site } from "./site";
+import { getContact } from "./kontak";
 
 export type PrayerTimes =
   | {
@@ -52,9 +52,10 @@ export const getPrayerTimes = createServerFn({ method: "GET" }).handler(
     const cached = cache.get(key);
     if (cached) return cached;
 
+    const { coordinates } = await getContact();
     const params = new URLSearchParams({
-      latitude: String(site.coordinates.latitude),
-      longitude: String(site.coordinates.longitude),
+      latitude: String(coordinates.latitude),
+      longitude: String(coordinates.longitude),
       method: String(KEMENAG_METHOD),
       timezonestring: TIME_ZONE,
     });

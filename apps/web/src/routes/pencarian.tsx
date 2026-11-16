@@ -3,6 +3,8 @@ import { ArrowUpRight, Search } from "lucide-react";
 
 import { EmptyState } from "../components/empty-state";
 import { PageHeader } from "../components/page-header";
+import { useContact } from "../lib/kontak";
+import { searchContent } from "../lib/pencarian";
 import { navGroups, site } from "../lib/site";
 
 export const Route = createFileRoute("/pencarian")({
@@ -14,6 +16,8 @@ export const Route = createFileRoute("/pencarian")({
           ? search.q.trim()
           : "",
   }),
+  loaderDeps: ({ search }) => ({ q: search.q }),
+  loader: ({ deps }) => searchContent({ data: deps.q }),
   head: () => ({
     meta: [
       { title: `Hasil Pencarian | ${site.name}` },
@@ -23,30 +27,35 @@ export const Route = createFileRoute("/pencarian")({
   component: SearchPage,
 });
 
-const publishedPages = [
-  { label: "Beranda", href: "/", keywords: `${site.name} ${site.area}` },
-  ...navGroups.flatMap((group) =>
-    group.items
-      .filter((item) => !item.unavailable && item.href !== "/pencarian")
-      .map((item) => ({
-        label: item.label,
-        href: item.href,
-        keywords: item.href === "/kontak" ? `${site.street} ${site.fullAddress}` : "",
-      })),
-  ),
-];
+const sitePages = navGroups.flatMap((group) =>
+  group.items.filter((item) => !item.unavailable && item.href !== "/pencarian"),
+);
 
 const actionClass =
   "flex min-h-12 items-center justify-center gap-2.5 self-start rounded-[5px] border px-[18px] text-[13px] font-semibold transition-colors";
 
 function SearchPage() {
   const { q } = Route.useSearch();
+  const content = Route.useLoaderData();
+  const contact = useContact();
   const words = q.toLocaleLowerCase("id").split(/\s+/).filter(Boolean);
+  const pages = [
+    { label: "Beranda", href: "/", kind: "Halaman", keywords: `${site.name} ${contact.area}` },
+    ...sitePages.map((item) => ({
+      label: item.label,
+      href: item.href,
+      kind: "Halaman",
+      keywords: item.href === "/kontak" ? `${contact.street} ${contact.fullAddress}` : "",
+    })),
+  ];
   const results = words.length
-    ? publishedPages.filter((item) => {
-        const text = `${item.label} ${item.keywords}`.toLocaleLowerCase("id");
-        return words.every((word) => text.includes(word));
-      })
+    ? [
+        ...pages.filter((item) => {
+          const text = `${item.label} ${item.keywords}`.toLocaleLowerCase("id");
+          return words.every((word) => text.includes(word));
+        }),
+        ...content,
+      ]
     : [];
 
   return (
@@ -108,7 +117,12 @@ function SearchPage() {
                   href={item.href}
                   className="flex min-h-16 items-center justify-between gap-4 rounded-[5px] px-5 py-4 text-sm font-semibold text-primary hover:bg-ak-pale"
                 >
-                  {item.label}
+                  <span className="flex min-w-0 flex-col gap-1">
+                    <span className="text-[10px] leading-[1.65] font-semibold text-ak-brown uppercase">
+                      {item.kind}
+                    </span>
+                    {item.label}
+                  </span>
                   <ArrowUpRight aria-hidden="true" className="size-[15px] shrink-0" />
                 </a>
               </li>

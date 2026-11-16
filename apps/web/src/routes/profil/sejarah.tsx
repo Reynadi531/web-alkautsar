@@ -3,9 +3,12 @@ import { buttonVariants } from "@web-alkautsar/ui/components/button";
 import { ArrowUpRight } from "lucide-react";
 
 import { PageHeader } from "../../components/page-header";
+import { RichText } from "../../components/rich-text";
+import { getHistory } from "../../lib/profil";
 import { site } from "../../lib/site";
 
 export const Route = createFileRoute("/profil/sejarah")({
+  loader: () => getHistory(),
   head: () => ({
     meta: [
       { title: `Sejarah Masjid | ${site.name}` },
@@ -18,22 +21,9 @@ export const Route = createFileRoute("/profil/sejarah")({
   component: HistoryPage,
 });
 
-const milestones = [
-  {
-    title: "01 · Awal pendirian",
-    description: "Tahun dan kisah pendirian menunggu arsip resmi.",
-  },
-  {
-    title: "02 · Perkembangan masjid",
-    description: "Tahun, foto arsip, dan narasi perubahan belum diberikan.",
-  },
-  {
-    title: "03 · Perjalanan berikutnya",
-    description: "Tonggak kegiatan akan ditambahkan setelah terverifikasi.",
-  },
-] as const;
-
 function HistoryPage() {
+  const history = Route.useLoaderData();
+
   return (
     <div className="history-page">
       <PageHeader
@@ -66,14 +56,16 @@ function HistoryPage() {
           />
         </section>
 
-        <aside
-          id="catatan-validasi"
-          aria-label="Catatan validasi konten sejarah"
-          className="rounded-[5px] bg-ak-pale px-[18px] py-3.5 text-xs leading-[1.65] text-ak-muted"
-        >
-          Narasi sejarah, tahun pendirian, dan tonggak perjalanan belum diberikan. Seluruh
-          keterangan berikut merupakan placeholder editorial, bukan fakta sejarah.
-        </aside>
+        {history.sample && (
+          <aside
+            id="catatan-validasi"
+            aria-label="Catatan validasi konten sejarah"
+            className="rounded-[5px] bg-ak-pale px-[18px] py-3.5 text-xs leading-[1.65] text-ak-muted"
+          >
+            Narasi sejarah, tahun pendirian, dan tonggak perjalanan belum diberikan. Seluruh
+            keterangan berikut merupakan placeholder editorial, bukan fakta sejarah.
+          </aside>
+        )}
 
         <section
           id="narasi-dan-perjalanan-waktu"
@@ -85,35 +77,43 @@ function HistoryPage() {
               id="judul-narasi"
               className="text-[23px] leading-[1.4] font-semibold text-ak-dark lg:text-[30px]"
             >
-              Perjalanan yang akan didokumentasikan
+              {history.title ?? "Perjalanan masjid"}
             </h2>
-            <p className="text-sm leading-[1.65] text-ak-muted lg:text-base">
-              Naskah sejarah resmi masjid akan ditampilkan di sini setelah diverifikasi bersama
-              pengurus. Bagian ini disiapkan untuk cerita awal pendirian, perkembangan bangunan, dan
-              peran masjid dalam lingkungan warga.
-            </p>
+            {history.narrative ? (
+              <RichText html={history.narrative} />
+            ) : (
+              <p className="text-sm leading-[1.65] text-ak-muted lg:text-base">
+                Naskah sejarah akan ditampilkan setelah diverifikasi bersama pengurus.
+              </p>
+            )}
             <a href="/profil" className={buttonVariants({ variant: "outline", size: "lg" })}>
               Kembali ke profil
               <ArrowUpRight aria-hidden="true" />
             </a>
           </div>
 
-          <ol
-            aria-label="Linimasa, placeholder editorial"
-            className="flex flex-col gap-4 rounded-[7px] bg-ak-cream p-[26px]"
-          >
-            {milestones.map((milestone) => (
-              <li
-                key={milestone.title}
-                className="flex flex-col gap-[7px] border-b border-ak-divider py-2.5"
-              >
-                <h3 className="text-[17px] leading-[1.65] font-semibold text-ak-dark">
-                  {milestone.title}
-                </h3>
-                <p className="text-[13px] leading-[1.65] text-ak-muted">{milestone.description}</p>
-              </li>
-            ))}
-          </ol>
+          {history.milestones.length > 0 && (
+            <ol
+              aria-label={history.sample ? "Linimasa, placeholder editorial" : "Linimasa"}
+              className="flex flex-col gap-4 rounded-[7px] bg-ak-cream p-[26px]"
+            >
+              {history.milestones.map((milestone, index) => (
+                <li
+                  key={milestone.id}
+                  className="flex flex-col gap-[7px] border-b border-ak-divider py-2.5"
+                >
+                  <h3 className="text-[17px] leading-[1.65] font-semibold text-ak-dark">
+                    {String(index + 1).padStart(2, "0")} · {milestone.title}
+                  </h3>
+                  {milestone.description && (
+                    <p className="text-[13px] leading-[1.65] text-ak-muted">
+                      {milestone.description}
+                    </p>
+                  )}
+                </li>
+              ))}
+            </ol>
+          )}
         </section>
       </div>
     </div>

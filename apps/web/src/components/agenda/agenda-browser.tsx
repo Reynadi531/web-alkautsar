@@ -1,14 +1,16 @@
 import { buttonVariants } from "@web-alkautsar/ui/components/button";
-import { Archive, ArrowUpRight } from "lucide-react";
+import { ArrowUpRight } from "lucide-react";
 import { useMemo, useState } from "react";
 
 import {
-  ALL_PERIODS,
   ARCHIVE_PAGE_SIZE,
-  categoryOptions,
+  agendaCategories,
   filterAgenda,
-  periodOptions,
+  type AgendaEvent,
+  type ArchiveEntry,
 } from "../../lib/agenda";
+import { ALL_PERIODS, periodOptions } from "../../lib/site";
+import { ArchiveList } from "../archive-list";
 import { EmptyState } from "../empty-state";
 import { SearchField, SelectField } from "../filter-controls";
 import { Pagination } from "../pagination";
@@ -16,14 +18,27 @@ import { AgendaCard } from "./agenda-card";
 
 const sectionTitle = "text-[23px] leading-[1.4] font-semibold text-ak-dark lg:text-[30px]";
 
-export function AgendaBrowser() {
+export function AgendaBrowser({
+  events,
+  archive: archiveEntries,
+}: {
+  events: readonly AgendaEvent[];
+  archive: readonly ArchiveEntry[];
+}) {
   const [query, setQuery] = useState("");
-  const [category, setCategory] = useState<string>(categoryOptions[0]);
+  const [category, setCategory] = useState<string>(agendaCategories[0]);
   const [period, setPeriod] = useState<string>(ALL_PERIODS);
   const [page, setPage] = useState(1);
-  const periods = useMemo(periodOptions, []);
+  const periods = useMemo(
+    () => periodOptions([...events, ...archiveEntries].map((item) => item.date)),
+    [events, archiveEntries],
+  );
 
-  const { featured, upcoming, archive, isFiltering } = filterAgenda({ query, category, period });
+  const { featured, upcoming, archive, isFiltering } = filterAgenda(events, archiveEntries, {
+    query,
+    category,
+    period,
+  });
   const hasAgenda = featured.length > 0 || upcoming.length > 0;
   const showAgenda = category !== "Arsip";
   const showArchive = category !== "Agenda";
@@ -53,7 +68,7 @@ export function AgendaBrowser() {
         <SelectField
           label="Kategori"
           value={category}
-          options={categoryOptions}
+          options={agendaCategories}
           onChange={reset(setCategory)}
         />
         <SelectField label="Periode" value={period} options={periods} onChange={reset(setPeriod)} />
@@ -109,22 +124,7 @@ export function AgendaBrowser() {
       {showArchive && archive.length > 0 && (
         <section id="arsip" aria-label="Arsip kegiatan" className="flex flex-col gap-4">
           <h2 className={`${sectionTitle} mb-3`}>Arsip kegiatan</h2>
-          <ul className="flex flex-col gap-4">
-            {archivePage.map((entry) => (
-              <li
-                key={entry.id}
-                className="flex items-center gap-4 rounded-[5px] bg-ak-cream px-5 py-4"
-              >
-                <Archive aria-hidden="true" className="size-5 shrink-0 text-primary" />
-                <p className="flex-1 text-base leading-[1.65] font-semibold text-ak-dark">
-                  {entry.title}
-                </p>
-                <p className="w-[100px] text-[11px] leading-[1.65] text-ak-brown sm:w-[200px]">
-                  {entry.status}
-                </p>
-              </li>
-            ))}
-          </ul>
+          <ArchiveList entries={archivePage} className="flex flex-col gap-4" />
           <Pagination
             page={currentPage}
             pageCount={pageCount}

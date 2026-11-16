@@ -1,0 +1,9 @@
+{
+  "name": "cms",
+  "private": true,
+  "scripts": {
+    "dev": "./scripts/pocketbase.sh serve --http=127.0.0.1:8090",
+    "migrate": "./scripts/pocketbase.sh migrate up",
+    "superuser": "./scripts/pocketbase.sh superuser upsert"
+  }
+}
