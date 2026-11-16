@@ -230,7 +230,9 @@ Run standalone Node/Bun tools that use Varlock from the owning app directory so 
 
 ## Deployment
 
-### Docker Compose
+Production: GitHub Actions builds and pushes images to GHCR (`.github/workflows/docker.yml`); servers run them with `docker-compose.prod.yml`. Step-by-step guide: [DEPLOYMENT.md](DEPLOYMENT.md).
+
+### Docker Compose (local build)
 
 - Target: web + cms
 - Config: `docker-compose.yml` (app Dockerfiles live in `apps/*/Dockerfile`)
