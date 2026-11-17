@@ -95,6 +95,17 @@ sudo systemctl reload caddy
 
 ## 5. Updates
 
+Copy `deploy.sh` next to `docker-compose.prod.yml` and run it. It pulls the images, backs up `cms_data` to `./backups` (stopping `cms` briefly), starts the stack, and waits for both services to be healthy.
+
+```sh
+./deploy.sh                    # deploy IMAGE_TAG from .env (default latest)
+./deploy.sh --tag 1.2.3        # pin a version (saved to .env); also used to roll back
+./deploy.sh --no-backup        # skip the backup
+GHCR_USER=me GHCR_TOKEN=... ./deploy.sh   # log in first (private packages)
+```
+
+Manual equivalent:
+
 ```sh
 cd /opt/web-alkautsar
 docker compose -f docker-compose.prod.yml pull
