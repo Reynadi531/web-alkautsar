@@ -23,7 +23,9 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        app: [web, cms]
+        # web deploys to Cloudflare Workers (cloudflare.yml); apps/web/Dockerfile
+        # stays for local full-stack runs with docker-compose.yml.
+        app: [cms]
     steps:
       - name: Checkout
         uses: actions/checkout@v7

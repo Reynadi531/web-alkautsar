@@ -1,19 +1,19 @@
 # Deployment
 
-The site runs as two containers:
+The site runs in two places:
 
-| Service | Image                                  | Port | Purpose                                         |
-| ------- | -------------------------------------- | ---- | ----------------------------------------------- |
-| `web`   | `ghcr.io/reynadi531/web-alkautsar-web` | 3001 | TanStack Start SSR app                          |
-| `cms`   | `ghcr.io/reynadi531/web-alkautsar-cms` | 8090 | PocketBase: content, uploads, admin UI at `/_/` |
+| Part  | Runs on                         | Deployed by                             | Purpose                                         |
+| ----- | ------------------------------- | --------------------------------------- | ----------------------------------------------- |
+| `web` | Cloudflare Workers              | `.github/workflows/cloudflare.yml`      | TanStack Start SSR app                          |
+| `cms` | A server with Docker, port 8090 | `deploy.sh` + `docker-compose.prod.yml` | PocketBase: content, uploads, admin UI at `/_/` |
 
-GitHub Actions builds the images; a server pulls them and runs them with `docker-compose.prod.yml` behind a reverse proxy that handles HTTPS.
+The Worker calls the CMS over the internet, and browsers load uploaded images from it, so the CMS domain must be public. Deploy the CMS first (steps 1 to 5), then the web app (step 7).
 
-The `web` app can instead run on Cloudflare Workers, with only `cms` on the server. See [Cloudflare Workers (web)](#7-cloudflare-workers-web).
+To run both parts locally in Docker, use `docker-compose.yml` (`bun run docker:up`). It still builds `apps/web/Dockerfile`.
 
-## 1. Images (GitHub Actions)
+## 1. CMS image (GitHub Actions)
 
-Workflow: `.github/workflows/docker.yml`. It builds `web` and `cms` in parallel for `linux/amd64`.
+Workflow: `.github/workflows/docker.yml`. It builds the `cms` image for `linux/amd64` and pushes it to `ghcr.io/reynadi531/web-alkautsar-cms`.
 
 | Trigger                                                 | Pushed tags                   |
 | ------------------------------------------------------- | ----------------------------- |
@@ -31,56 +31,45 @@ git tag v1.0.0
 git push origin v1.0.0
 ```
 
-After the first push, the packages show up under the GitHub profile → Packages. They are private by default. Either make each one public (package → Package settings → Change visibility) or log the server in to GHCR (step 3).
+After the first push, the package shows up under the GitHub profile → Packages. It is private by default. Either make it public (package → Package settings → Change visibility) or log the server in to GHCR (step 3).
 
 ARM server (e.g. Ampere, Raspberry Pi): set `platforms: linux/amd64,linux/arm64` in the workflow and add a `docker/setup-qemu-action@v4` step before Buildx. Emulated builds are much slower.
 
 ## 2. Server prerequisites
 
 - Linux host with Docker Engine and the Compose plugin (`docker compose version`).
-- Two DNS records pointing at the server, for example:
-  - `alkautsar.example.org` → web
-  - `cms.alkautsar.example.org` → CMS. Browsers load uploaded images from here, so it must be public.
-- Ports 80 and 443 open. 3001 and 8090 stay closed: the compose file binds them to `127.0.0.1` only.
+- A DNS record pointing at the server, for example `cms.alkautsar.example.org`.
+- Ports 80 and 443 open. 8090 stays closed: the compose file binds it to `127.0.0.1` only.
 
 ## 3. First deploy
 
 ```sh
 # On the server
 mkdir -p /opt/web-alkautsar && cd /opt/web-alkautsar
+# Copy docker-compose.prod.yml and deploy.sh from the repo, then:
+chmod +x deploy.sh
+./deploy.sh
 
-# Copy docker-compose.prod.yml and deploy.sh from the repo, then generate .env
-# (prompts for the values, or pass them as flags):
-./deploy.sh --init --public-url https://cms.alkautsar.example.org
-
-# Only if the GHCR packages are private. Token: classic PAT with read:packages.
-echo "$GHCR_TOKEN" | docker login ghcr.io -u <github-username> --password-stdin
-
-docker compose -f docker-compose.prod.yml pull
-docker compose -f docker-compose.prod.yml up -d
-docker compose -f docker-compose.prod.yml ps   # both should become "healthy"
+# If the GHCR package is private. Token: classic PAT with read:packages.
+GHCR_USER=<github-username> GHCR_TOKEN=<token> ./deploy.sh
 ```
 
-On first start PocketBase runs the migrations in `apps/cms/pb_migrations`, which create the schema and seed the initial content.
+`deploy.sh` creates `.env` on the first run, pulls the image, starts `cms`, and waits until it is healthy. On first start PocketBase runs the migrations in `apps/cms/pb_migrations`, which create the schema and seed the initial content.
 
-Create the CMS admin account:
+Create the CMS admin account. The leading space keeps the password out of shell history when `HISTCONTROL=ignorespace` is set:
 
 ```sh
-docker compose -f docker-compose.prod.yml exec cms \
+ docker compose -f docker-compose.prod.yml exec cms \
   /pb/pocketbase superuser upsert admin@example.org 'a-long-password' --dir=/pb/pb_data
 ```
 
-Then sign in at `https://cms.alkautsar.example.org/_/`.
+Then sign in at `https://cms.alkautsar.example.org/_/` (after step 4).
 
 ## 4. Reverse proxy (HTTPS)
 
 Any proxy works. Example with [Caddy](https://caddyserver.com/), which fetches TLS certificates automatically. `/etc/caddy/Caddyfile`:
 
 ```caddyfile
-alkautsar.example.org {
-	reverse_proxy 127.0.0.1:3001
-}
-
 cms.alkautsar.example.org {
 	request_body {
 		max_size 50MB
@@ -91,38 +80,30 @@ cms.alkautsar.example.org {
 
 ```sh
 sudo systemctl reload caddy
+curl -fsS https://cms.alkautsar.example.org/api/health
 ```
 
 ## 5. Updates
 
-Copy `deploy.sh` next to `docker-compose.prod.yml` and run it. It pulls the images, backs up `cms_data` to `./backups` (stopping `cms` briefly), starts the stack, and waits for both services to be healthy.
+Run `deploy.sh` again. It pulls the image, backs up `cms_data` to `./backups` (stopping `cms` briefly), starts `cms`, and waits for it to be healthy.
 
 ```sh
 ./deploy.sh                    # deploy IMAGE_TAG from .env (default latest); generates .env if missing
 ./deploy.sh --init             # (re)generate .env only, no deploy
 ./deploy.sh --tag 1.2.3        # pin a version (saved to .env); also used to roll back
 ./deploy.sh --no-backup        # skip the backup
-GHCR_USER=me GHCR_TOKEN=... ./deploy.sh   # log in first (private packages)
+./deploy.sh --keep 14          # backups to keep (default 7)
 ```
 
-Manual equivalent:
+New migrations in `pb_migrations` run automatically when the `cms` container restarts.
 
-```sh
-cd /opt/web-alkautsar
-docker compose -f docker-compose.prod.yml pull
-docker compose -f docker-compose.prod.yml up -d
-docker image prune -f
-```
+Roll back: `./deploy.sh --tag <previous tag>`. If the newer `cms` already ran a migration, restore the backup taken before the update (step 6).
 
-New migrations in `pb_migrations` run automatically when the `cms` container restarts. Back up first (step 6).
-
-Pin a version: set `IMAGE_TAG=1.2.3` (or `sha-abc1234`) in `.env`, then `pull` and `up -d`.
-
-Roll back: set `IMAGE_TAG` to the previous tag and `up -d`. If the newer `cms` already ran a migration, restore the backup taken before the update.
+Servers set up before the web app moved to Cloudflare also ran a `web` container. The next `./deploy.sh` removes it. Remove the web domain's block from the Caddyfile too.
 
 ## 6. Backups
 
-All content (database and uploads) lives in the `web-alkautsar_cms_data` volume. The `web` container holds no state.
+All content (database and uploads) lives in the `web-alkautsar_cms_data` volume. `deploy.sh` backs it up before each update. Manual backup and restore:
 
 ```sh
 # Backup
@@ -140,11 +121,9 @@ docker compose -f docker-compose.prod.yml start cms
 
 Copy the archives off the server. PocketBase can also schedule backups to S3 itself: admin UI → Settings → Backups.
 
-## 7. Cloudflare Workers (web)
+## 7. Web app (Cloudflare Workers)
 
-Optional alternative to the `web` container. The CMS stays on the server (steps 2 to 6); the Worker calls it over the internet, so the CMS domain must be public.
-
-The same code builds for both targets. `NITRO_PRESET` picks the target: unset means `node-server` for Docker, `cloudflare_module` means Workers.
+`NITRO_PRESET=cloudflare_module` builds `apps/web` for Workers. Without it, the build targets Node (`node-server`), which the local Docker setup uses.
 
 On Workers, `POCKETBASE_URL` and `POCKETBASE_PUBLIC_URL` are baked in at build time, not read at startup. Changing them needs a redeploy. The build fails if either is unset or points at `localhost`/`127.0.0.1`. Usually both are the public CMS URL.
 
@@ -161,6 +140,8 @@ Repository → Settings → Secrets and variables → Actions:
 | `POCKETBASE_URL`        | variable | `https://cms.alkautsar.example.org`                                                 |
 | `POCKETBASE_PUBLIC_URL` | variable | Optional, defaults to `POCKETBASE_URL`                                              |
 
+After setting them, run the workflow once from the Actions tab (Cloudflare Workers → Run workflow).
+
 ### Manual deploy
 
 ```sh
@@ -176,22 +157,26 @@ To try the Workers build locally first, run `bun run preview:cf` in `apps/web` w
 
 The Worker is named `web-alkautsar` (set in `apps/web/nitro.config.ts`) and is first served at `web-alkautsar.<account>.workers.dev`. To use your own domain: Workers & Pages → `web-alkautsar` → Settings → Domains & Routes → Add → Custom domain. The domain's DNS must be on Cloudflare.
 
-If the web domain moves to Cloudflare, remove its block from the Caddyfile (step 4) and keep only the CMS block. The `web` container is then unused. It listens only on `127.0.0.1`, so leaving it running is harmless.
-
 ## Environment reference
 
-Set in `.env` next to `docker-compose.prod.yml`:
+Server, in `.env` next to `docker-compose.prod.yml` (generated by `deploy.sh`):
 
-| Variable                | Required | Default  | Notes                                                 |
-| ----------------------- | -------- | -------- | ----------------------------------------------------- |
-| `POCKETBASE_PUBLIC_URL` | yes      | none     | Public CMS URL that browsers use for images and files |
-| `IMAGE_TAG`             | no       | `latest` | Image tag for both services                           |
+| Variable    | Required | Default  | Notes         |
+| ----------- | -------- | -------- | ------------- |
+| `IMAGE_TAG` | no       | `latest` | CMS image tag |
 
-`POCKETBASE_URL` is fixed to `http://cms:8090` in the compose file, so server-side requests stay on the internal network. Both URLs are read when the server starts, so changing them needs only a restart, not a rebuild.
+Web app, at Worker build time (GitHub variables or shell environment):
+
+| Variable                | Required | Notes                                                       |
+| ----------------------- | -------- | ----------------------------------------------------------- |
+| `POCKETBASE_URL`        | yes      | CMS address the Worker calls for content                    |
+| `POCKETBASE_PUBLIC_URL` | yes      | CMS address browsers use for images and files; usually same |
 
 ## Troubleshooting
 
-- `web` stays unhealthy: check `docker compose -f docker-compose.prod.yml logs web`. It waits for `cms` to be healthy before starting.
+- `cms` stays unhealthy: `docker compose -f docker-compose.prod.yml logs cms`.
+- Pages show no content or 500s: the Worker cannot reach `POCKETBASE_URL`. Check `curl https://cms.<domain>/api/health` from outside the server, then redeploy the Worker if the URL changed.
 - Images missing on pages: `POCKETBASE_PUBLIC_URL` is wrong or the CMS domain is not reachable from the browser.
+- Cloudflare workflow skipped: the `POCKETBASE_URL` repository variable is not set.
 - `denied` on pull: the package is private and the server is not logged in to GHCR.
 - Uploads fail with 413: raise the proxy's body size limit.
