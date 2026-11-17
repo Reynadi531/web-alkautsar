@@ -47,11 +47,9 @@ ARM server (e.g. Ampere, Raspberry Pi): set `platforms: linux/amd64,linux/arm64`
 # On the server
 mkdir -p /opt/web-alkautsar && cd /opt/web-alkautsar
 
-# Copy docker-compose.prod.yml from the repo, then:
-cat > .env <<'EOF'
-IMAGE_TAG=latest
-POCKETBASE_PUBLIC_URL=https://cms.alkautsar.example.org
-EOF
+# Copy docker-compose.prod.yml and deploy.sh from the repo, then generate .env
+# (prompts for the values, or pass them as flags):
+./deploy.sh --init --public-url https://cms.alkautsar.example.org
 
 # Only if the GHCR packages are private. Token: classic PAT with read:packages.
 echo "$GHCR_TOKEN" | docker login ghcr.io -u <github-username> --password-stdin
@@ -98,7 +96,8 @@ sudo systemctl reload caddy
 Copy `deploy.sh` next to `docker-compose.prod.yml` and run it. It pulls the images, backs up `cms_data` to `./backups` (stopping `cms` briefly), starts the stack, and waits for both services to be healthy.
 
 ```sh
-./deploy.sh                    # deploy IMAGE_TAG from .env (default latest)
+./deploy.sh                    # deploy IMAGE_TAG from .env (default latest); generates .env if missing
+./deploy.sh --init             # (re)generate .env only, no deploy
 ./deploy.sh --tag 1.2.3        # pin a version (saved to .env); also used to roll back
 ./deploy.sh --no-backup        # skip the backup
 GHCR_USER=me GHCR_TOKEN=... ./deploy.sh   # log in first (private packages)
