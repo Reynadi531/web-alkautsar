@@ -9,6 +9,8 @@ The site runs as two containers:
 
 GitHub Actions builds the images; a server pulls them and runs them with `docker-compose.prod.yml` behind a reverse proxy that handles HTTPS.
 
+The `web` app can instead run on Cloudflare Workers, with only `cms` on the server. See [Cloudflare Workers (web)](#7-cloudflare-workers-web).
+
 ## 1. Images (GitHub Actions)
 
 Workflow: `.github/workflows/docker.yml`. It builds `web` and `cms` in parallel for `linux/amd64`.
@@ -137,6 +139,44 @@ docker compose -f docker-compose.prod.yml start cms
 ```
 
 Copy the archives off the server. PocketBase can also schedule backups to S3 itself: admin UI → Settings → Backups.
+
+## 7. Cloudflare Workers (web)
+
+Optional alternative to the `web` container. The CMS stays on the server (steps 2 to 6); the Worker calls it over the internet, so the CMS domain must be public.
+
+The same code builds for both targets. `NITRO_PRESET` picks the target: unset means `node-server` for Docker, `cloudflare_module` means Workers.
+
+On Workers, `POCKETBASE_URL` and `POCKETBASE_PUBLIC_URL` are baked in at build time, not read at startup. Changing them needs a redeploy. The build fails if either is unset or points at `localhost`/`127.0.0.1`. Usually both are the public CMS URL.
+
+### Automatic deploys (GitHub Actions)
+
+Workflow: `.github/workflows/cloudflare.yml`. It deploys on every push to `main` (except CMS-only or docs-only changes) and from the Actions tab. It stays skipped until `POCKETBASE_URL` is set.
+
+Repository → Settings → Secrets and variables → Actions:
+
+| Name                    | Kind     | Value                                                                               |
+| ----------------------- | -------- | ----------------------------------------------------------------------------------- |
+| `CLOUDFLARE_API_TOKEN`  | secret   | Cloudflare dashboard → My Profile → API Tokens → "Edit Cloudflare Workers" template |
+| `CLOUDFLARE_ACCOUNT_ID` | secret   | Cloudflare dashboard → Workers & Pages → Account ID                                 |
+| `POCKETBASE_URL`        | variable | `https://cms.alkautsar.example.org`                                                 |
+| `POCKETBASE_PUBLIC_URL` | variable | Optional, defaults to `POCKETBASE_URL`                                              |
+
+### Manual deploy
+
+```sh
+bunx wrangler login   # once, opens the browser
+POCKETBASE_URL=https://cms.alkautsar.example.org \
+POCKETBASE_PUBLIC_URL=https://cms.alkautsar.example.org \
+  bun run deploy:cf
+```
+
+To try the Workers build locally first, run `bun run preview:cf` in `apps/web` with the same variables. It serves the build on `http://localhost:8787`.
+
+### Domain
+
+The Worker is named `web-alkautsar` (set in `apps/web/nitro.config.ts`) and is first served at `web-alkautsar.<account>.workers.dev`. To use your own domain: Workers & Pages → `web-alkautsar` → Settings → Domains & Routes → Add → Custom domain. The domain's DNS must be on Cloudflare.
+
+If the web domain moves to Cloudflare, remove its block from the Caddyfile (step 4) and keep only the CMS block. The `web` container is then unused. It listens only on `127.0.0.1`, so leaving it running is harmless.
 
 ## Environment reference
 

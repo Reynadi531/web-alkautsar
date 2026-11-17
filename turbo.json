@@ -5,7 +5,8 @@
     "build": {
       "dependsOn": ["^build"],
       "inputs": ["$TURBO_DEFAULT$", ".env*"],
-      "outputs": [".output/**"]
+      "outputs": [".output/**"],
+      "env": ["NITRO_PRESET", "POCKETBASE_URL", "POCKETBASE_PUBLIC_URL"]
     },
     "lint": {
       "dependsOn": ["^lint"]

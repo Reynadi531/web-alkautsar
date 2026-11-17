@@ -4,6 +4,9 @@
   "type": "module",
   "scripts": {
     "build": "vite build",
+    "build:cf": "NITRO_PRESET=cloudflare_module vite build",
+    "deploy:cf": "bun run build:cf && bunx wrangler@4.164.0 deploy",
+    "preview:cf": "bun run build:cf && bunx wrangler@4.164.0 dev",
     "serve": "vite preview",
     "dev": "vite dev",
     "check-types": "vite build && tsc --noEmit",

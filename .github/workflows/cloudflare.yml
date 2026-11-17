@@ -1,0 +1,47 @@
+name: Cloudflare Workers
+
+# Deploys apps/web to Cloudflare Workers. Skipped until the repository
+# variable POCKETBASE_URL is set; see DEPLOYMENT.md ("Cloudflare Workers").
+
+on:
+  push:
+    branches: [main]
+    paths-ignore:
+      - "apps/cms/**"
+      - "**.md"
+  workflow_dispatch:
+
+concurrency:
+  group: cloudflare-${{ github.ref }}
+  cancel-in-progress: false
+
+permissions:
+  contents: read
+
+jobs:
+  deploy:
+    name: Deploy web
+    if: vars.POCKETBASE_URL != ''
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+
+      - name: Set up Bun
+        uses: oven-sh/setup-bun@v2
+        with:
+          bun-version-file: package.json
+
+      - name: Install dependencies
+        run: bun install --frozen-lockfile
+
+      - name: Build and deploy
+        working-directory: apps/web
+        run: bun run deploy:cf
+        env:
+          NODE_ENV: production
+          # Baked into the Worker at build time.
+          POCKETBASE_URL: ${{ vars.POCKETBASE_URL }}
+          POCKETBASE_PUBLIC_URL: ${{ vars.POCKETBASE_PUBLIC_URL || vars.POCKETBASE_URL }}
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
